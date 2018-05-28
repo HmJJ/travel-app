@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" th:remove="tag">
+<th:block layout:fragment="body-header">
+	<div class="head">
+		<div class="row">
+			<div class="col-sm-8 col-xs-12">
+				<div class="page-header">
+					<h2><span th:text="${cn}">页面标题</span><small class="text-muted" th:text="${en}">title</small></h2>
+				</div>
+			</div>
+			<div class="col-sm-4 col-xs-12">
+				<div class="right-icon-btn">
+					<th:block layout:fragment="icon-btn-content"></th:block>
+				</div>
+			</div>
+		</div>
+	</div>
+</th:block>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" th:remove="tag">
+<th:block layout:insert="~{html-head}">
+<th:block layout:fragment="inculde-content">
+	<script type="text/javascript" charset="utf-8" th:src="@{/js/jquery/jquery.ajaxfileupload.js}" ></script>
+</th:block>
+<th:block layout:fragment="script-content">
+	<script type="text/javascript">
+		$(document).ready(function() {
+// 			alert(window.location.pathname);
+		});
+	</script>
+	<style>
+	</style>
+	<title>轮播图管理</title>
+</th:block>
+</th:block>
+</head>
+<body>
+
+	<div layout:insert="~{body-nav }" th:remove="tag"></div>
+	<div class="container content">
+		<div layout:insert="~{body-header }"
+		 th:with="cn='轮播图管理', en='Loop Configure'" th:remove="tag">
+			<th:block layout:fragment="icon-btn-content">
+				<button class="icon-btn" id="search">
+					<i class="icon-search"></i>
+					<div><span>Search</span></div>
+				</button>
+				<button class="icon-btn" id="create">
+					<i class="icon-plus"></i>
+					<div><span>Create</span></div>
+				</button>
+			</th:block>
+		</div>
+		<div layout:insert="~{body-alert }" th:with="type='info', header='Info'" th:remove="tag">
+			<th:block layout:fragment="alert-content">
+				<p><em>This is a simple list of tasks!</em></p>
+			</th:block>
+		</div>
+		<th:block layout:fragment="body-context">
+			<div class="data table-responsive">
+				<table class="table table-hover">
+					<thead>
+						<tr class="active">
+							<th>图片地址<small>ImgUrl</small></th>
+							<th>开始事件<small>StartDate</small></th>
+							<th>结束时间<small>EndDate</small></th>
+							<th>#</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:if="${page != null and page.content != null}" th:each="entity,start : ${page.content }">
+							<td th:text="${entity.imgUrl }" class="detail" th:onclick="'javascript:jumpurl(\'detail/' + ${entity.id} + '\');'">ImgUrl</td>
+							<td th:text="${entity.startdate }">type</td>
+							<td th:text="${entity.enddate }">email</td>
+							<td>
+								<a href="javascript:void(0);" th:onclick="'javascript:jumpurl(\'detail/' + ${entity.id} + '\');'" class="btn btn-success btn-xs"><i class="icon-search"></i><span th:text="">Detail</span></a>
+								<a href="javascript:void(0);" th:onclick="'javascript:jumpurl(\'modify/' + ${entity.id} + '\');'" class="btn btn-primary btn-xs"><i class="icon-pencil"></i><span th:text="">Modify</span></a>
+								<a href="javascript:void(0);" th:onclick="'javascript:operate(\'delete\', \'' + @{/loop} + '\', \'/loop/delete/' + ${entity.id} + '\');'" class="btn btn-danger btn-xs"><i class="icon-trash"></i><span th:text="">Delete</span></a>
+							</td>
+						</tr>
+					</tbody>
+					<tfoot>
+					</tfoot>
+				</table>
+			</div>
+		</th:block>
+		<div layout:insert="~{body-form-lg }" th:with="form='searchForm', action='search', class='form-horizontal search-form'" th:remove="tag">
+			<th:block layout:insert="~{body-form-query}">
+				<th:block layout:fragment="body-form-query-content">
+					<div class="row">
+						<div class="col-md-4 search-text">
+							<label>图片地址<small>ImgUrl</small></label>
+						</div>
+						<div class="col-md-6">
+							<input type="text" class="form-control" id="imgUrl" name="imgUrl" th:value="${entity.imgUrl }" />
+						</div>
+					</div>
+				</th:block>
+			</th:block>
+		</div>
+		<div layout:insert="~{body-pagebar }" th:with="form='searchForm', action='search'" th:remove="tag"></div>
+	</div>
+</body>
+</html>

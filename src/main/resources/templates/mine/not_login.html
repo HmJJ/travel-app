@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<th:block layout:insert="html-head">
+	<th:block layout:fragment="inculde-content">
+	</th:block>
+	<th:block layout:fragment="script-content">
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$("#login_btn").click(function() {
+					window.location.href = "/needLogin/toLogin/";
+					$("#loading").show();
+				});
+			});
+		</script>
+		<style>
+		body{
+			background-color:#ffffcc;
+		}
+			/*Button Two*/
+.login_btn {
+  border-radius: 4px;
+  background-color:#2BD5B3;
+  border: none;
+  padding: 10px;
+  width: 120px;
+  transition: all 0.5s;
+  font-size: 20px;
+  font-family:"STXingkai",Georgia,Serif;
+}
+
+
+.login_btn span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.login_btn span:after {
+  content: '»';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
+.login_btn:hover span {
+  padding-right: 25px;
+}
+
+.login_btn:hover span:after {
+  opacity: 1;
+  right: 0;
+}
+#welcome_text {
+	font-size: 25px;
+	font-family:"STXingkai",Georgia,Serif;
+	color:#ff9966;
+}
+		</style>
+		<title>未登录</title>
+	</th:block>
+</th:block>
+<body>
+	<!--欢迎来到马蜂窝-->
+	<div class="col-xs-12 mine_welcome">
+		<span id="welcome_text">欢迎来到啾啾</span>
+	</div>
+	<!--登陆/注册-->
+	<div class="col-xs-6 mine_login">
+		<button class="login_btn" id="login_btn"><span>登录/注册</span></button>
+	</div>
+	<!--图片-->
+	<div class="col-xs-6 mine_img">
+		<img id="mine_img" class="img-rounded" th:src="@{/img/head_pic.jpeg}" alt="" />
+	</div>
+</body>
+</html>

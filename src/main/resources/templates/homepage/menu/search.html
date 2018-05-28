@@ -1,0 +1,120 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" th:remove="tag">
+<th:block layout:insert="~{html-head}">
+<th:block layout:fragment="inculde-content">
+</th:block>
+<th:block layout:fragment="script-content">
+	<script type="text/javascript">
+		$(document).ready(function() {
+			
+		});
+	</script>
+	<style>
+	</style>
+	<title>菜单管理</title>
+</th:block>
+</th:block>
+</head>
+<body>
+
+	<div layout:insert="~{body-nav }" th:remove="tag"></div>
+	<div class="container content">
+		<div layout:insert="~{body-header }"
+		 th:with="cn='菜单管理', en='Menu Configure'" th:remove="tag">
+			<th:block layout:fragment="icon-btn-content">
+				<button class="icon-btn" id="search">
+					<i class="icon-search"></i>
+					<div><span>Search</span></div>
+				</button>
+				<button class="icon-btn" id="create">
+					<i class="icon-plus"></i>
+					<div><span>Create</span></div>
+				</button>
+			</th:block>
+		</div>
+		<div layout:insert="~{body-alert }" th:with="type='info', header='Info'" th:remove="tag">
+			<th:block layout:fragment="alert-content">
+				<p><em>This is a simple list of tasks!</em></p>
+			</th:block>
+		</div>
+		<th:block layout:fragment="body-context">
+			<div class="data table-responsive">
+				<table class="table table-hover">
+					<thead>
+						<tr class="active">
+							<th>类型<small>type</small></th>
+							<th>名称<small>name</small></th>
+							<th>位置<small>position</small></th>
+							<th>图片地址<small>image url</small></th>
+							<th>跳转地址<small>link url</small></th>
+							<th>状态<small>status</small></th>
+							<th>#</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:if="${page != null and page.content != null}"
+							th:each="entity,start : ${page.content }">
+							<td th:switch="${entity.type }">
+								<p th:case="'1'">首页</p>
+								<p th:case="'2'">目的地</p>
+								<p th:case="'3'">酒店</p>
+								<p th:case="'4'">个人中心</p>
+							</td>
+							<td th:text="${entity.name }">name</td>
+							<td th:if="${entity.position mod 4 != 0}" th:text="  '第'+${entity.position div 4 + 1}+'行第'+${entity.position mod 4}+'列'  " ></td>
+							<td th:if="${entity.position mod 4 == 0}" th:text="  '第'+${(entity.position - 1) div 4 + 1}+'行第4列'  " ></td>
+							<td><img th:src="${entity.imgSrc}" style="width:60px;height:40px;"/></td>
+							<td th:text="${entity.linkUrl}"></td>
+							<td th:switch="${entity.status }">
+								<p th:case="'1'">未使用</p>
+								<p th:case="'2'">已使用</p>
+							</td>
+							<td th:switch="${entity.status}">
+							   <a th:case="'1'" id="apply" href="javascript:void(0);"
+								th:onclick="'javascript:operate(\'apply\', \'' + @{/menu} + '\', \'/menu/apply/' + ${entity.name} + '\');'"
+								class="btn btn-danger btn-xs" >
+								    <i class="icon-ok" ></i>
+								    <span>Apply</span>
+								</a>
+								<a th:case="'2'" id="apply" href="javascript:void(0);"
+								th:onclick="'javascript:operate(\'apply\', \'' + @{/menu} + '\', \'/menu/apply/' + ${entity.name} + '\');'"
+								class="btn btn-danger btn-xs" >
+								    <i class="icon-remove" ></i>
+								    <span>Cancel</span>
+								</a>
+							   <a href="javascript:void(0);"
+								th:onclick="'javascript:jumpurl(\'modify/' + ${entity.id} + '\');'"
+								class="btn btn-primary btn-xs"><i class="icon-pencil"></i>
+								<span>Modify</span></a>
+							   <a href="javascript:void(0);"
+								th:onclick="'javascript:operate(\'delete\', \'' + @{/menu} + '\', \'/menu/delete/' + ${entity.id} + '\');'"
+								class="btn btn-danger btn-xs"><i class="icon-trash"></i>
+								<span>Delete</span></a>
+							 </td>
+						</tr>
+					</tbody>
+					<tfoot>
+					</tfoot>
+				</table>
+			</div>
+		</th:block>
+		<div layout:insert="~{body-form-lg }" th:with="form='searchForm', action='search', class='form-horizontal search-form'" th:remove="tag">
+			<th:block layout:insert="~{body-form-query}">
+				<th:block layout:fragment="body-form-query-content">
+					<div class="row">
+						<div class="col-md-4 search-text">
+							<label>图片地址<small>ImgSrc</small></label>
+						</div>
+						<div class="col-md-6">
+							<input type="text" class="form-control" id="imgUrl" name="imgSrl" th:value="${entity.imgSrc }" />
+						</div>
+					</div>
+				</th:block>
+			</th:block>
+		</div>
+		<div layout:insert="~{body-pagebar }" th:with="form='searchForm', action='search'" th:remove="tag"></div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<th:block layout:insert="html-head">
+		<th:block layout:fragment="inculde-content">
+			<link rel="stylesheet" type="text/css" th:href="@{/css/mine/mine.css}" />
+		</th:block>
+		<th:block layout:fragment="script-content">
+			<script type="text/javascript">
+				$(document).ready(function() {
+					var userflag = [[${session.userflag}]];
+					if(userflag == "0"){
+						$("#is_login").load("/needLogin/not_login");
+					}else{
+						$("#is_login").load("/needLogin/is_login");
+					}
+					
+//			 		$("#login_btn").click(function() {
+//			 			window.location.href = "/needLogin/toLogin/";
+//			 			$("#loading").show();
+//			 		});
+					$(".mine_mall").click(function(){
+			 			window.location.href="/commom/wait/";
+			 			$("#loading").show();
+					});
+				});
+			</script>
+			<style>
+				body{
+					background-color:#ffffcc;
+				}
+				#mall_text{
+					font-size: 20px;
+					font-family:"STXingkai",Georgia,Serif;
+				}
+			</style>
+			<title>啾啾-个人中心</title>
+		</th:block>
+</th:block>
+
+<body>
+
+	<div class="main">
+		<div class="row mine_top">
+			<!--设置和消息-->
+			<div class="col-xs-6 mine_setting">
+				<i class="glyphicon glyphicon-cog setting_icon"></i>
+			</div>
+			<div class="col-xs-6 mine_message">
+				<i class="glyphicon glyphicon-comment message_icon"></i>
+			</div>
+			<div id="is_login" class="col-xs-12" style="margin-top:40px;margin-bottom:10px;"></div>
+		</div>
+
+		<div class="divide_block"></div>
+
+		<div class="mine_middle">
+
+			<!--菜单-->
+			<div th:if="${btns != null and btns.content != null}" class="row mine_menu">
+				<div th:each="btn,btn_start : ${btns.content }">
+					<div class="col-xs-4 per_menu" style="margin-bottom:20px;">
+						<a th:href="@{${btn.linkUrl}}"><img id="btn_img" class="img-rounded" th:src="${btn.imgSrc}" style="width: 50px; height: 50px;" /></a><br />
+						<a th:href="@{${btn.linkUrl}}"><span id="btn_text" th:text="${btn.name}"></span></a>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="divide_block"></div>
+
+		<div class="mine_bottom">
+
+			<div class="row mine_mall">
+				<div class="col-xs-10 mine_mall_text">
+					<span id="mall_text">啾啾纪念品商店</span>
+				</div>
+				<div class="col-xs-2 mine_right_icon">
+					<i class="glyphicon glyphicon-menu-right right_icon"></i>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+
+</body>
+
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<th:block layout:insert="html-head">
+	<th:block layout:fragment="inculde-content">
+		<link rel="stylesheet" type="text/css" th:href="@{/css/mine/register.css}" />
+	</th:block>
+	<th:block layout:fragment="script-content">
+		<script type="text/javascript">
+			$(document).ready(function() {
+				rmAttr();
+				
+				$("#register_phone_value").keyup(function(){
+					rmAttr();
+				});
+				$("#register_name_value").keyup(function(){
+					rmAttr();
+				});
+				$("#register_password_value").keyup(function(){
+					rmAttr();
+				});
+				function rmAttr(){
+					var p = $("#register_phone_value").val();
+				    var n = $("#register_name_value").val();
+				    var pasw = $("#register_password_value").val();
+					if((p != "" && p != null && p != NaN && p != undefined && p.length > 0 && p)
+				       && (n != "" && n != null && n != NaN && n != undefined && n.length > 0 && n)
+				       && (pasw != "" && pasw != null && pasw != NaN && pasw != undefined) && pasw.length > 0 && pasw){
+					   $("#register_btn").removeAttr('disabled');
+				    }else{
+					   $("#register_btn").attr('disabled','disabled');
+				    }
+				};
+				$("#register_btn").click(function() {
+					$.ajax({
+						type : "POST",
+						async : true,
+						url : '/needLogin/register',
+						dataType : "json",
+						data:{
+							'phone':$("#register_phone_value").val(),
+							'name':$("#register_name_value").val(),
+							'password':$("#register_password_value").val()
+						},
+						success : function(data) {
+							setTimeout(function() {
+								  alert(data.message);						
+								}, 1500);
+							if(data.status == "y"){
+							    window.location.href="/needLogin";
+								$("#loading").show();
+							}else{
+								window.location.reload();
+								$("#loading").show();
+							}
+						}
+					});
+				});
+			});
+		</script>
+		<style>
+			
+		</style>
+		<title>注册</title>
+	</th:block>
+</th:block>
+	
+	<body>
+		
+		<div class="main" style="width:100%;">
+			
+			<div class="register_top">
+				<div class="row">
+					<div class="col-xs-2 register_top_back">
+						<i onclick="javascript:history.back(-1);" class="glyphicon glyphicon-chevron-left"></i>
+					</div>
+					<div class="col-xs-8 register_top_word">
+						<span>手机快速注册</span>
+					</div>
+					<div class="col-xs-2">
+						
+					</div>
+				</div>
+			</div>
+			
+			<div class="row register_middle">
+				<div class="col-xs-12 register_middle_title">
+				</div>
+				<div class="col-xs-12 register_middle_account">
+					<span id="register_phone_title">中国 +86 |</span>&nbsp;&nbsp;
+					<input id="register_phone_value" type="text" placeholder="请输入手机号码" />
+				</div>
+				<div class="col-xs-12 divid">
+				    <div class="divide_line"></div>
+				</div>
+				<div class="col-xs-12 register_middle_name">
+					<span id="register_name_title">昵称</span>&nbsp;&nbsp;
+					<input id="register_name_value" type="text" placeholder="最长15个字符" />
+				</div>
+				<div class="col-xs-12 divid">
+				    <div class="divide_line"></div>
+				</div>
+				<div class="col-xs-12 register_middle_password">
+					<span id="register_password_title">密码</span>&nbsp;&nbsp;
+					<input type="password" id="register_password_value" />
+					<img id="passwordeye" src="../../img/eye-off.png" onclick="changeType()" />
+				</div>
+				<div class="col-xs-12 divid">
+				    <div class="divide_line"></div>
+				</div>
+				<div class="col-xs-12 register_middle_check">
+					<span>点击完成即同意<a>&lt;&lt;啾啾用户注册协议&gt;&gt;</a></span>
+				</div>
+				<div class="col-xs-12 register_middle_btn">
+					<button id="register_btn" class="btn register_btn" style="font-size: 20px;color: #777777;font-family:'STXingkai',Georgia,Serif;">完成注册，进入啾啾</button>
+				</div>
+			</div>
+			
+		</div>
+		
+	</body>
+	<script type="text/javascript">
+			var flag = 1;
+            function changeType(){
+        	    if(flag == 1){
+        		    $("#register_password_value").attr('type','text');
+        		    $('#passwordeye').attr('src','../../img/eye-on.png');
+        		    flag = 2
+        	    }else{
+        		    $("#register_password_value").attr('type','password');
+        		    $('#passwordeye').attr('src','../../img/eye-off.png');
+        		    flag = 1;
+        	    }
+            }
+	</script>
+</html>

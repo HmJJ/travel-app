@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" th:remove="tag">
+<th:block layout:fragment="body-upload">
+	<form th:id="${form}" th:attr="action='' + ${action} + ''" th:classappend="${class}" method="post" class="">
+		<th:block layout:fragment="body-form-upload">
+		<div class="modal fade" id="upload" tabindex="-1" role="dialog" aria-labelledby="uploadLabel" aria-hidden="true" data-backdrop="static">
+			<div class="modal-dialog" >
+				<div class="modal-content">
+					<div class="modal-header">
+<!-- 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> -->
+						<h4 class="modal-title" ><i class="icon-upload-alt"></i><small><span th:text="#{_SYSTEM_OPERATION_UPLOAD}">Upload</span></small></h4>
+					</div>
+					<div class="modal-body">
+						<th:block layout:fragment="body-form-upload-content"></th:block>
+					</div>
+					<div class="modal-footer">
+						<button type="button" id="close" class="btn btn-default" data-dismiss="modal"><span th:text="#{_SYSTEM_OPERATION_CLOSE}">Close</span></button>
+						<button type="button" id="reset" class="btn btn-default" ><span th:text="#{_SYSTEM_OPERATION_RESET}">Reset</span></button>
+						<button type="button" id="commit" class="btn btn-info" ><span th:text="#{_SYSTEM_OPERATION_UPLOAD}">Upload</span></button>
+					</div>
+				</div>
+			</div>
+		</div>
+		</th:block>
+	</form>
+</th:block>
+</html>

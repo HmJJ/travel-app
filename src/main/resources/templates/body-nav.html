@@ -1,0 +1,102 @@
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" th:remove="tag">
+<th:block layout:fragment="body-nav">
+	<nav class="navbar navbar-default">
+	<div class="container">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#configuration-navbar-collapse-1" aria-expanded="false">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" th:href="@{/}"><img th:src="@{/img/aliens.png}" style="width:20px;" /></a>
+			</div>
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="configuration-navbar-collapse-1">
+				<ul class="nav navbar-nav">
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">首页 <span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a th:href="@{/loop/search}">轮播图片管理</a></li>
+							<li role="separator" class="divider"></li>
+							<li><a th:href="@{/menu/search}">菜单管理</a></li>
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">目的地 <span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a th:href="@{/attractionManage/search}">景点管理</a></li>
+							<li role="separator" class="divider"></li>
+							<li><a th:href="@{/foodManage/search}">美食管理</a></li>
+							<li role="separator" class="divider"></li>
+							<li><a th:href="@{/travelnoteManage/search}">游记管理</a></li>
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">酒店 <span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="#">酒店信息</a></li>
+							<li role="separator" class="divider"></li>
+							<li><a href="#">酒店管理</a></li>
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">个人中心 <span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="#">用户管理</a></li>
+							<li role="separator" class="divider"></li>
+							<li><a href="#">纪念商店管理</a></li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">配置 <span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="#">国际化配置</a></li>
+							<li role="separator" class="divider"></li>
+							<li><a href="#">大小类配置</a></li>
+							<li role="separator" class="divider"></li>
+							<li><a id="init">城市信息初始化</a></li>
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img th:src="@{/img/manager.png}" style="width:16px;backgroud-color:white;" /><span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="#">管理员信息</a></li>
+							<li role="separator" class="divider"></li>
+							<li><a href="#">退出登录</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+			
+		</div>
+	</div>
+	</nav>
+	<script type="text/javascript">
+			$(document).ready(function() {
+// 				$("#init").click(function() {
+// 					$.ajax({
+// 						type : "POST",
+// 						async : true,
+// 						url : '/init/info',
+// 						dataType : "json",
+// 						data : {},
+// 						success : function(data) {
+// 							console.log("init over");
+// 							window.location.href = "/manage";
+// 							show_loading();
+// 						},
+// 						error : function(){
+// 							console.log("faild");
+// 						}
+// 					})
+// 				});
+			});
+	</script>
+</th:block>
+</html>

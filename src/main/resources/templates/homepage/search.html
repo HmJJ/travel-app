@@ -1,0 +1,138 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+
+<th:block layout:insert="html-head">
+	<th:block layout:fragment="inculde-content">
+		<script th:src="@{/js/swiper/swiper.jquery.min.js}" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" th:href="@{/css/homepage/homepage.css}" />
+		<link type="text/css" rel="stylesheet" th:href="@{/css/swiper.min.css}" />
+	</th:block>
+	<th:block layout:fragment="script-content">
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$(".search_btn").click(function() {
+					var userflag = [[${session.userflag}]];
+					console.log(userflag);
+					if(userflag == "0"){
+						window.location.href = "/navigate?page=4";
+					}else{
+						window.location.href = "/commom/search";
+					}
+				});
+			});
+		</script>
+		<style>
+			.loop {
+				width:100%;
+				height:100%;
+			}
+			body{
+				background-color:#ffffcc;
+			}
+		</style>
+		<title>Home Page</title>
+	</th:block>
+</th:block>
+
+<body>
+
+	<div class="main" style="width: 100%;">
+
+		<div class="home_top">
+			<!--轮播图-->
+			<div class="swiper-container">
+				<div class="swiper-wrapper">
+					<div class="swiper-slide"><img class="img-rounded loop" th:src="@{/img/loop1.jpg}" /></div>
+					<div class="swiper-slide"><img class="img-rounded loop" th:src="@{/img/loop2.jpg}" /></div>
+					<div class="swiper-slide"><img class="img-rounded loop" th:src="@{/img/loop3.jpg}" /></div>
+				</div>
+				<!-- 如果需要分页器 -->
+				<div class="swiper-pagination"></div>
+			</div>
+		</div>
+
+		<div class="home_middle">
+			<!--搜索栏-->
+			<div class="row home_search">
+				<div class="col-xs-2 search_1" style="text-align:right;">
+					<a><i class="glyphicon glyphicon-heart" style="font-size:30px;color:#99ff99;"></i></a>
+				</div>
+				<div class="col-xs-9 search_2">
+					<div class="input-group search_btn">
+      					<input type="text" class="form-control" placeholder="Search for...">
+      					<span class="input-group-btn">
+       					<button class="btn btn-default" type="button">Go!</button>
+      					</span>
+   					 </div><!-- /input-group -->
+				</div>
+				<div class="col-xs-1 search_3">
+<!-- 					<a href=""><i class="glyphicon glyphicon-bell" -->
+<!-- 						id="message_icon"></i></a> -->
+				</div>
+			</div>
+			<!--历史目的地-->
+			<div th:if="${historys != null}" class="row history_place">
+				<div th:each="history,start : ${historys }">
+					<div class="col-xs-4 place">
+						<span th:text="${history.RegionName}"></span>
+					</div>
+				</div>
+			</div>
+			<!--菜单-->
+			<div th:if="${btns != null and btns.content != null}" class="row home_menu">
+				<div th:each="btn,btn_start : ${btns.content }">
+					<div class="col-xs-3 per_menu">
+						<a th:href="@{${btn.linkUrl}}"><img id="btn_img" class="img-rounded" th:src="${btn.imgSrc}" style="width: 50px; height: 50px;" /></a><br />
+						<a th:href="@{${btn.linkUrl}}"><span id="btn_text" th:text="${btn.name}"></span></a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="divide_block"></div>
+
+		<div class="row home_bottom" style="overflow-y:auto; overflow-x:auto; height:250px;">
+			<!--热门游记-->
+			<div th:if="${travelnotes != null}" th:each="travelnote, start : ${travelnotes}">
+				<div class="col-xs-12 per_note" style="margin-top:15px;border-bottom:1px solid;">
+					<input type="hidden" th:value="${travelnote.id}">
+					<div class="row">
+						<div class="col-xs-2">
+							<span th:text="${travelnote.user.username}"></span>
+						</div>
+						<div class="col-xs-8">
+							<span th:text="${travelnote.title}"></span>
+						</div>
+						<div class="col-xs-2">
+							<span th:text="${travelnote.attractionname}"></span>
+						</div>
+						<div class="col-xs-12">
+							<a th:onclick="'javascript:checknote(\'' + ${travelnote.id} + '\');'"><span th:text="${travelnote.content}"></span></a>
+						</div>
+						<div class="col-xs-12" style="text-align:right;">
+							<span th:text="'浏览量：'+${travelnote.watchs}"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+</body>
+<script type="text/javascript">
+		$(document).ready(function() {
+
+			var mySwiper = new Swiper('.swiper-container', {
+				loop: true,
+				autoplay: 2000,
+				// 如果需要分页器
+				pagination: '.swiper-pagination',
+			})
+
+		});
+	</script>
+
+</html>

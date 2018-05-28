@@ -1,0 +1,156 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<th:block layout:insert="~{html-head}">
+	<th:block layout:fragment="inculde-content">
+		<script type="text/javascript" charset="utf-8"
+			th:src="@{/jqueryfileupload-9.19.1/js/vendor/jquery.ui.widget.js}"></script>
+		<script type="text/javascript" charset="utf-8"
+			th:src="@{/jqueryfileupload-9.19.1/js/jquery.iframe-transport.js}"></script>
+		<script type="text/javascript" charset="utf-8"
+			th:src="@{/jqueryfileupload-9.19.1/js/jquery.fileupload.js}"></script>
+	</th:block>
+	<th:block layout:fragment="script-content">
+		<script type="text/javascript" th:inline="javascript">
+		var _fileupload_url = [[${_fileupload_url}]];
+		$(document).ready(function() {
+// 			$("#fileupload").attr("data-url", _fileupload_url);
+			$('#fileupload').fileupload({
+				type : 'post',
+				dataType:"json",
+				url:"/upload/images",
+				autoUpload : true,
+				done: function (e, data) {
+					console.log(data);
+					var retavl = data.result;
+					alert(retavl.data['remote_path']);
+					if (retavl) {
+						$("#img").val(retavl.data['remote_path']);
+						$("#imgurl").val(retavl.data['remote_path']);
+						$("#imgsrc").attr("src", "");
+						$("#imgsrc").attr("src", retavl.data['remote_path']);
+					}
+				},
+				fail : function(e, data) {
+					var retval = data;
+					console.log(retval.message);
+				}
+			});
+		});
+	</script>
+	</th:block>
+	<title>hello</title>
+</th:block>
+<body>
+	<div layout:insert="~{body-nav}" th:remove="tag"></div>
+	<div class="container content">
+		<div layout:insert="~{body-header}"
+			th:with="cn='\'菜单配置\'新增/修改', en='MainPage Configure Create/Modify'"
+			th:remove="tag">
+			<th:block layout:fragment="icon-btn-content">
+				<button class="icon-btn" id="historyback">
+					<i class="icon-undo"></i>
+					<div>
+						<span>Cancel</span>
+					</div>
+				</button>
+			</th:block>
+		</div>
+		<div layout:insert="~{body-alert}"
+			th:with="type='info', header='Info'" th:remove="tag">
+			<!--/* Implements alert content fragment with simple content */-->
+			<th:block layout:fragment="alert-content">
+				<p>
+					<em>This is a simple list of tasks!</em>
+				</p>
+			</th:block>
+		</div>
+		<th:block layout:insert="~{body-form}" th:with="form='modifyForm'"
+			th:remove="tag">
+			<th:block layout:fragment="body-form-query">
+				<th:block layout:fragment="body-form-query-content"></th:block>
+			</th:block>
+			<th:block layout:insert="body-form-modify">
+				<th:block layout:fragment="body-form-modify-content">
+					<input type="hidden" name="id" th:value="${entity.id}" />
+					<div class="form-group">
+						<label for="position">类型<small>Type</small></label>
+						<select class="form-control" id="type" name="type">
+						    <option th:if="${entity.type != null && entity.type == 1}" th:value="${entity.type}"  th:text="首页"  ></option>
+						    <option th:if="${entity.type != null && entity.type == 2}" th:value="${entity.type}"  th:text="目的地"  ></option>
+						    <option th:if="${entity.type != null && entity.type == 3}" th:value="${entity.type}"  th:text="酒店"  ></option>
+						    <option th:if="${entity.type != null && entity.type == 4}" th:value="${entity.type}"  th:text="个人中心"  ></option>
+							<option th:value="1">首页</option>
+							<option th:value="2">目的地</option>
+							<option th:value="3">酒店</option>
+							<option th:value="4">个人中心</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="position">位置<small>Position</small></label>
+						<select class="form-control" id="position" name="position">
+						    <option th:if="${entity.position != null && entity.position mod 4 != 0}" th:value="${entity.position}"  th:text="  '第'+${entity.position div 4 + 1}+'行第'+${entity.position mod 4}+'列'  "  ></option>
+						    <option th:if="${entity.position != null && entity.position mod 4 == 0}" th:value="${entity.position}"  th:text="   '第'+${(entity.position - 1) div 4 + 1}+'行第4列'  "  ></option>
+							<option value="">选此行则默认添加到最后</option>
+							<option th:value="1">第1行第1个</option>
+							<option th:value="2">第1行第2个</option>
+							<option th:value="3">第1行第3个</option>
+							<option th:value="4">第1行第4个</option>
+							<option th:value="5">第2行第1个</option>
+							<option th:value="6">第2行第2个</option>
+							<option th:value="7">第2行第3个</option>
+							<option th:value="8">第2行第4个</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="buttonName">按钮名<small>Name</small></label> <input
+							type="text" class="form-control" id="name"
+							name="name" th:value="${entity.name }" />
+					</div>
+					<div class="panel panel-primary">
+						<div class="panel-body">
+							<div class="form-group">
+								<label for="imgSrc">按钮图标<small>ImgSrc</small></label>
+								<div class="alert alert-info" role="alert"
+									style="margin-bottom: 0px;">图片大小 [ 360 x 200 ]</div>
+								<div class="row">
+									<div class="col-sm-4" style="margin-top: 10px;">
+										<div
+											style="height: 74px; padding-top: 4px; text-align: center;">
+											<img alt="logo" id="imgsrc" th:src="${entity.imgSrc }"
+												width="120px" height="66.6px;">
+										</div>
+									</div>
+									<div class="col-sm-8" style="margin-top: 10px;">
+										<div class="input-group">
+											<input type="hidden" id="imgurl" name="imgSrc" th:value="${entity.imgSrc }" />
+											<input type="text" class="form-control" id="img" value="" style="margin-bottom: 6px;" readonly="readonly" />
+											<input type='file' class="form-control" id="fileupload" name="fileupload" value="" style="padding: 3px 12px;" />
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group" style="display:none;">
+						<label for="state">状态<small>Status</small></label>
+						<input th:if="${entity.status == null}" type="text" class="form-control" id="status"
+							name="status" th:value="1" />
+						<input th:if="${entity.status != null}" type="text" class="form-control" id="status"
+							name="status" th:value="${entity.status}" />
+					</div>
+					<div class="form-group">
+						<label for="linkUrl">链接地址<small>LinkUrl</small></label>
+						<input type="text" class="form-control" id="linkUrl"
+							name="linkUrl" th:value="${entity.linkUrl}" />
+					</div>
+					<a href="javascript:void(0);"
+						th:onclick="'javascript:operate(\'commit\', \'' + @{/menu} + '\', \'' + @{/menu/commit} + '\');'"
+						class="btn btn-default"><span>Save</span></a>
+				</th:block>
+			</th:block>
+		</th:block>
+	</div>
+</body>
+</html>

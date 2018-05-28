@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+	<th:block layout:insert="html-head">
+		<th:block layout:fragment="inculde-content">
+			<link rel="stylesheet" type="text/css" th:href="@{/css/mine/login.css}" />
+		</th:block>
+		<th:block layout:fragment="script-content">
+			<script type="text/javascript">
+				$(document).ready(function() {
+				});
+			</script>
+			<style>
+				input:focus { outline: none; } 
+				body{
+					background-color:#ffffcc;
+				}
+			</style>
+			<title>啾啾-美食推荐</title>
+		</th:block>
+	</th:block>
+<body>
+
+	<div class="main" style="width:100%;">
+
+		<div class="login_top">
+			<div class="row">
+				<div class="col-xs-2 login_top_back">
+					<i onclick="javascript:history.back(-1);"
+						class="glyphicon glyphicon-chevron-left"></i>
+				</div>
+				<div class="col-xs-8 login_top_word">
+					<span>美食推荐</span>
+				</div>
+				<div class="col-xs-2"></div>
+			</div>
+			<hr/>
+		</div>
+
+		<div class="row login_middle">
+			<!--美食推荐-->
+			<div th:if="${hot_foods != null}" th:each="food, start : ${hot_foods}">
+				<div class="col-xs-12 per_food" style="margin-top:10px;margin-bottom:10px;">
+					<div class="row">
+						<div class="col-xs-2">
+							<span th:text="${start.count}"></span>
+						</div>
+						<div class="col-xs-5">
+							<a><span th:text="${food.name}"></span></a>
+						</div>
+						<div class="col-xs-5">
+							<a><span th:text="${food.attractionname}"></span></a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+</body>
+</html>

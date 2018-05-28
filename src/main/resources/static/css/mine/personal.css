@@ -1,0 +1,65 @@
+.personal_top {
+	background-color: #B2DBA1;
+}
+.personal_part1 {
+	text-align: center;
+	margin-top: 1%;
+}
+.personal_top_back {
+	font-size: 25px;
+}
+.personal_top_share {
+	padding-top: 1%;
+	font-size: 25px;
+}
+.top_head_pic {
+	text-align: right;
+}
+#head_pic {
+	width: 70px;
+	height: 70px;
+	border-radius: 50%;
+}
+.top_visit_count {
+	font-size: 10px;
+	font-family:"STKaiti",Georgia,Serif;
+	background-color: #EEEEEE;
+	border-top-left-radius: 10%;
+	border-bottom-left-radius: 10%;
+	margin-top: 45%;
+}
+.personal_part3 {
+	margin-top: 2%;
+}
+.name_level {
+	text-align: center;
+}
+.name {
+	text-align: right;
+	font-size: 25px;
+	color: white;
+	font-family:"STKaiti",Georgia,Serif;
+}
+.level_border {
+}
+.level {
+	margin-top: 2%;
+	background-color: white;
+}
+#level {
+	font-size: 15px;
+	color: black;
+	font-family:"STKaiti",Georgia,Serif;
+}
+#sign_word {
+	width: 70%;
+	border: hidden;
+	font-size: 15px;
+	color: white;
+	font-family:"STKaiti",Georgia,Serif;
+}
+.guanzhu {
+	font-size: 10px;
+	color: white;
+	font-family:"STKaiti",Georgia,Serif;
+}

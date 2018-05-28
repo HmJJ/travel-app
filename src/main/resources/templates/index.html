@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" th:remove="tag">
+<th:block layout:insert="html-head">
+	<th:block layout:fragment="inculde-content">
+		<link rel="stylesheet" type="text/css" th:href="@{/css/shine/style.css}" />
+		<link rel="stylesheet" type="text/css" th:href="@{/css/colorful-button/style.css}" />
+		<script type="text/javascript" charset="utf-8" th:src="@{/js/colorful-button/index.js}"></script>
+		<script type="text/javascript" charset="utf-8" th:src="@{/js/colorful-button/prefixfree.min.js}"></script>
+	</th:block>
+	<th:block layout:fragment="script-content">
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$("button#tourists_enter").click(function(){
+					setTimeout(function(){
+						window.location.href="navigate?page=1";
+						$("#loading").show();
+					},500);
+				});
+				$("button#manager_enter").click(function(){
+					setTimeout(function(){
+						window.location.href="manage";
+						$("#loading").show();
+					},500);
+				});
+				
+				$.getScript('http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js',function(){  
+//		 			  alert(remote_ip_info.country);//国家  
+//		 			  alert(remote_ip_info.province);//省份  
+//		 			  alert(remote_ip_info.city);//城市  
+					  $.ajax({
+							type : "POST",
+							async : true,
+							url : '/navigate/locationCity',
+							dataType : "json",
+							data:{
+								'country':remote_ip_info.country,
+								'province':remote_ip_info.province,
+								'city':remote_ip_info.city
+							},
+							success : function(data) {
+//		 						$("#_destination").val(remote_ip_info.city);
+								console.log(data.message);
+							}
+						});
+				}); 
+			});
+		</script>
+		<style>
+			.main {
+	text-align: center;
+}
+
+.view {
+	margin-top: 0%;
+}
+
+.btn {
+	margin-top: 2%;
+}
+		</style>
+		<title>啾啾旅行札记</title>
+	</th:block>
+</th:block>
+<body>
+	<div class="main">
+		<div class="row view">
+			<div class="col-xs-12 word">
+  				<p class="title_p"><a class="title_w" href="#">WELCOME</a><br /><a class="title_w" style="font-size:25px;">啾啾</a></p>
+			</div>
+			<div class="col-xs-12 btn">
+				<button id="tourists_enter">用户进入</button>
+				<canvas id="myCanvas" width="50" height="50"></canvas>
+			</div>
+			<div class="col-xs-12 btn">
+				<button id="manager_enter">管理员进入</button>
+				<canvas id="myCanvas" width="30" height="30"></canvas>
+			</div>
+		</div>
+		<th:block frameborder="0" scrolling="no" layout:insert="index2" width="100%" height="0"></th:block>
+	</div>
+</body>
+</html>

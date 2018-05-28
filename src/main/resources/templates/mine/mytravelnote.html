@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+	<th:block layout:insert="html-head">
+		<th:block layout:fragment="inculde-content">
+			<link rel="stylesheet" type="text/css" th:href="@{/css/mine/login.css}" />
+		</th:block>
+		<th:block layout:fragment="script-content">
+			<script type="text/javascript">
+				$(document).ready(function() {
+					$("#create_note").click(function() {
+						window.location.href = "/travelnote/create/";
+						$("#loading").show();
+					});
+				});
+			</script>
+			<style>
+				input:focus { outline: none; } 
+				body{
+					background-color:#ffffcc;
+				}
+			</style>
+			<title>啾啾-我的游记</title>
+		</th:block>
+	</th:block>
+<body>
+
+	<div class="main" style="width:100%;">
+
+		<div class="login_top">
+			<div class="row">
+				<div class="col-xs-2 login_top_back">
+					<i onclick="javascript:history.back(-1);"
+						class="glyphicon glyphicon-chevron-left"></i>
+				</div>
+				<div class="col-xs-8 login_top_word">
+					<span>我的游记</span>
+				</div>
+				<div class="col-xs-2">
+					<i id="create_note" class="glyphicon glyphicon-pencil" style="font-size:22px;"></i>
+				</div>
+			</div>
+			<hr/>
+		</div>
+
+		<div class="row login_middle" style="overflow-y:auto; overflow-x:auto; height:550px;">
+			<!--推荐目的地-->
+			<div th:if="${travelnotes != null}" th:each="travelnote, start : ${travelnotes}">
+				<div class="col-xs-12 per_note" style="margin-top:15px;border-bottom:1px solid;">
+					<div class="row">
+						<div class="col-xs-2">
+							<span th:text="${travelnote.user.username}"></span>
+						</div>
+						<div class="col-xs-8">
+							<span th:text="${travelnote.title}"></span>
+						</div>
+						<div class="col-xs-2">
+							<span th:text="${travelnote.attractionname}"></span>
+						</div>
+						<div class="col-xs-12">
+							<a th:onclick="'javascript:checknote(\'' + ${travelnote.id} + '\');'"><span th:text="${travelnote.content}"></span></a>
+						</div>
+						<div class="col-xs-3">
+							<span th:text="'浏览量：'+${travelnote.watchs}"></span>
+						</div>
+						<div class="col-xs-3">
+						</div>
+						<div class="col-xs-6">
+							<span th:text="${#dates.format(travelnote.createdate,'yyyy-MM-dd HH-mm-ss')}"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+</body>
+</html>

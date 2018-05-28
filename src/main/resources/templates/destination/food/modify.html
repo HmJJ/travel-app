@@ -1,0 +1,236 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<th:block layout:insert="~{html-head}">
+	<th:block layout:fragment="inculde-content">
+		<script type="text/javascript" charset="utf-8"
+			th:src="@{/jqueryfileupload-9.19.1/js/vendor/jquery.ui.widget.js}"></script>
+		<script type="text/javascript" charset="utf-8"
+			th:src="@{/jqueryfileupload-9.19.1/js/jquery.iframe-transport.js}"></script>
+		<script type="text/javascript" charset="utf-8"
+			th:src="@{/jqueryfileupload-9.19.1/js/jquery.fileupload.js}"></script>
+	</th:block>
+	<th:block layout:fragment="script-content">
+		<script type="text/javascript" th:inline="javascript">
+		var _fileupload_url = [[${_fileupload_url}]];
+		$(document).ready(function() {
+// 			$("#fileupload").attr("data-url", _fileupload_url);
+			$('#fileupload').fileupload({
+				type : 'post',
+				dataType:"json",
+				url:"/upload/images",
+				autoUpload : true,
+				done: function (e, data) {
+					console.log(data);
+					var retavl = data.result;
+					alert(retavl.data['remote_path']);
+					if (retavl) {
+						$("#img").val(retavl.data['remote_path']);
+						$("#imgurl").val(retavl.data['remote_path']);
+						$("#imgsrc").attr("src", "");
+						$("#imgsrc").attr("src", retavl.data['remote_path']);
+					}
+				},
+				fail : function(e, data) {
+					var retval = data;
+					console.log(retval.message);
+				}
+			});
+			var flag= 0;
+			$("#provinceCode").click(function(){
+				$.ajax({
+					type : "POST",
+					async : false,
+					url : '/destinationManage/province',
+					dataType : "json",
+					data : {},
+					success : function(data) {
+						flag ++;
+						var retval = data;
+						var province_list = retval.data['province_list'];
+// 						$("#province").empty();
+						$.each(province_list, function(index, area){
+							if(flag == 1){
+								$("#provinceCode").append("<option id='"+area['regionCode']+"' value='"+area['regionCode']+"'>"+area['regionName']+"</option>");
+							}
+						});
+// 						console.log($("#province option:selected").val());
+						$("#provinceCode").change(function(){
+							$.ajax({
+								type : "POST",
+								async : false,
+								url : '/destinationManage/cities',
+								dataType : "json",
+								data : {
+									parentCode:$("#provinceCode option:selected").val()
+								},
+								success : function(data) {
+									var retval1 = data;
+									var cities_list = retval1.data['cities_list'];
+									$("#cityCode").empty();
+									$.each(cities_list, function(index, area1){
+										$("#cityCode").append(
+										"<option value='"+area1['regionCode']+"'>"+area1['regionName']+"</option>");
+// 										console.log(area1['regionCode']+area1['regionName']);
+									});
+									$("#cityCode").ready(function(){
+										$.ajax({
+											type : "POST",
+											async : false,
+											url : '/attractionManage/attr',
+											dataType : "json",
+											data : {
+												regionCode:$("#cityCode option:selected").val()
+											},
+											success : function(data) {
+// 												console.log(data);
+												var retval1 = data;
+												var attrs_list = retval1.data['attrs_list'];
+												$("#attractionid").empty();
+												$.each(attrs_list, function(index, attr){
+// 													console.log(attr);
+													$("#attractionid").append(
+													"<option value='"+attr['id']+"'>"+attr['name']+"</option>");
+												});
+											},error:function(data){console.log("faild")}
+										});
+									});
+									$("#cityCode").change(function(){
+										$.ajax({
+											type : "POST",
+											async : false,
+											url : '/attractionManage/attr',
+											dataType : "json",
+											data : {
+												regionCode:$("#cityCode option:selected").val()
+											},
+											success : function(data) {
+// 												console.log(data);
+												var retval1 = data;
+												var attrs_list = retval1.data['attrs_list'];
+												$("#attractionid").empty();
+												$.each(attrs_list, function(index, attr){
+// 													console.log(attr);
+													$("#attractionid").append(
+													"<option value='"+attr['id']+"'>"+attr['name']+"</option>");
+												});
+											},error:function(data){console.log("faild")}
+										});
+									});
+								}
+							});
+						});
+					}
+				});
+			});
+		});
+	</script>
+	</th:block>
+	<title>hello</title>
+</th:block>
+<body>
+	<div layout:insert="~{body-nav}" th:remove="tag"></div>
+	<div class="container content">
+		<div layout:insert="~{body-header}"
+			th:with="cn='\'美食配置\'新增/修改', en='Food Configure Create/Modify'"
+			th:remove="tag">
+			<th:block layout:fragment="icon-btn-content">
+				<button class="icon-btn" id="historyback">
+					<i class="icon-undo"></i>
+					<div>
+						<span>Cancel</span>
+					</div>
+				</button>
+			</th:block>
+		</div>
+		<div layout:insert="~{body-alert}"
+			th:with="type='info', header='Info'" th:remove="tag">
+			<!--/* Implements alert content fragment with simple content */-->
+			<th:block layout:fragment="alert-content">
+				<p>
+					<em>This is a simple list of tasks!</em>
+				</p>
+			</th:block>
+		</div>
+		<th:block layout:insert="~{body-form}" th:with="form='modifyForm'"
+			th:remove="tag">
+			<th:block layout:fragment="body-form-query">
+				<th:block layout:fragment="body-form-query-content"></th:block>
+			</th:block>
+			<th:block layout:insert="body-form-modify">
+				<th:block layout:fragment="body-form-modify-content">
+					<input type="hidden" name="id" th:value="${entity.id}" />
+					<div class="form-group">
+						<label for="name">美食名称<small>Name</small></label> <input
+							type="text" class="form-control" id="name"
+							name="name" th:value="${entity.name }" />
+					</div>
+					<div class="form-group">
+						<label for="provinceCode">所属省份<small>province</small></label><br />
+						<select class="form-control" id="provinceCode" name="provinceCode">
+							<option th:value="${entity.provinceCode}" th:text="${entity.provinceName}"></option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="cityCode">所属地区<small>city</small></label><br />
+						<select class="form-control" id="cityCode" name="cityCode">
+							<option th:value="${entity.cityCode}" th:text="${entity.cityName}"></option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="attractionid">所属景点<small>attraction</small></label>
+						<select class="form-control" id="attractionid" name="attractionid">
+							<option th:if="${entity.attractionid != null}" th:value="${entity.attractionid}" th:text="${entity.attractionname}"></option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="hotlevel">热度<small>hot level</small></label>
+						<select class="form-control" id="hotlevel" name="hotlevel">
+							<option th:value="${entity.hotlevel}" th:text="${entity.hotlevel}"></option>
+							<option th:value="10">10</option>
+							<option th:value="9">9</option>
+							<option th:value="8">8</option>
+							<option th:value="7">7</option>
+							<option th:value="6">6</option>
+							<option th:value="5">5</option>
+							<option th:value="4">4</option>
+							<option th:value="3">3</option>
+							<option th:value="2">2</option>
+							<option th:value="1">1</option>
+						</select>
+					</div>
+					<div class="panel panel-primary">
+						<div class="panel-body">
+							<div class="form-group">
+								<label for="imgSrc">图片<small>ImgSrc</small></label>
+								<div class="alert alert-info" role="alert"
+									style="margin-bottom: 0px;">图片大小 [ 360 x 200 ]</div>
+								<div class="row">
+									<div class="col-sm-4" style="margin-top: 10px;">
+										<div
+											style="height: 74px; padding-top: 4px; text-align: center;">
+											<img alt="logo" id="imgsrc" th:src="${entity.imgSrc }"
+												width="120px" height="66.6px;">
+										</div>
+									</div>
+									<div class="col-sm-8" style="margin-top: 10px;">
+										<div class="input-group">
+											<input type="hidden" id="imgurl" name="imgSrc" th:value="${entity.imgSrc }" />
+											<input type="text" class="form-control" id="img" value="" style="margin-bottom: 6px;" readonly="readonly" />
+											<input type='file' class="form-control" id="fileupload" name="fileupload" value="" style="padding: 3px 12px;" />
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<a href="javascript:void(0);"
+						th:onclick="'javascript:operate(\'commit\', \'' + @{/foodManage} + '\', \'' + @{/foodManage/commit} + '\');'"
+						class="btn btn-default"><span>Save</span></a>
+				</th:block>
+			</th:block>
+		</th:block>
+	</div>
+</body>
+</html>

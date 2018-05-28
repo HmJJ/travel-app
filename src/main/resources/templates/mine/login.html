@@ -1,0 +1,138 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+	<th:block layout:insert="html-head">
+		<th:block layout:fragment="inculde-content">
+			<link rel="stylesheet" type="text/css" th:href="@{/css/mine/login.css}" />
+		</th:block>
+		<th:block layout:fragment="script-content">
+			<script type="text/javascript">
+				$(document).ready(function() {
+					$("#toRegister").click(function() {
+						window.location.href = "/needLogin/toRegister/";
+						$("#loading").show();
+					});
+					$("#login_btn").click(function() {
+						$.ajax({
+							type : "POST",
+							async : true,
+							url : '/needLogin/login',
+							dataType : "json",
+							data : {
+								'phone' : $("#login_account_value").val(),
+								'password' : $("#login_password_value").val()
+							},
+							success : function(data) {
+								/* $("#dialog").dialog(); */
+								alert(data.message);
+								if (data.status == "y") {
+									window.location.href = "/navigate?page=4";
+									$("#loading").show();
+								} else {
+									window.location.reload();
+									$("#loading").show();
+								}
+							}
+						});
+					});
+				});
+			</script>
+			<style>
+				input:focus { outline: none; } 
+			</style>
+			<title>啾啾-个人信息</title>
+		</th:block>
+	</th:block>
+<body>
+
+	<div class="main" style="width:100%;">
+
+		<div class="login_top">
+			<div class="row">
+				<div class="col-xs-2 login_top_back">
+					<i onclick="javascript:history.back(-1);"
+						class="glyphicon glyphicon-chevron-left"></i>
+				</div>
+				<div class="col-xs-8 login_top_word">
+					<span>啾啾旅行欢迎您</span>
+				</div>
+				<div class="col-xs-2"></div>
+			</div>
+		</div>
+
+		<div class="row login_middle">
+			<div class="col-xs-12 login_middle_title">
+				<span>账号登录</span>
+			</div>
+			<div class="col-xs-12 login_middle_account">
+				<span id="login_account_title">账号</span>&nbsp;&nbsp; <input
+					id="login_account_value" type="text" placeholder="手机号/注册邮箱" />
+			</div>
+			<div class="col-xs-12 divid">
+				<div class="divide_line"></div>
+			</div>
+			<div class="col-xs-12 login_middle_password">
+				<span id="login_password_title">密码</span>&nbsp;&nbsp; <input
+					type="password" id="login_password_value" /> <img id="passwordeye"
+					src="../../img/eye-off.png" onclick="changeType()" />
+			</div>
+			<div class="col-xs-12 divid">
+				<div class="divide_line"></div>
+			</div>
+			<div class="col-xs-12 login_middle_forget">
+				<span>忘记密码</span>
+			</div>
+			<div class="col-xs-12 login_middle_btn">
+				<button class="btn login_btn" id="login_btn"
+					style="font-size: 20px; color: #777777; font-family: 'STXingkai', Georgia, Serif;">登录</button>
+			</div>
+			<div class="col-xs-12 login_middle_third">
+				<span id="third_word">------------第三方账号登录------------</span>
+			</div>
+			<div class="col-xs-5 login_middle_third_wechat">
+				<button id="btn_wechat">
+					<img id="wechat" th:src="@{/img/wechat.png}" />
+				</button>
+			</div>
+			<div class="col-xs-2 login_middle_third_weibo">
+				<button id="btn_weibo">
+					<img id="weibo" th:src="@{/img/weibo.png}" />
+				</button>
+			</div>
+			<div class="col-xs-5 login_middle_third_qq">
+				<button id="btn_qq">
+					<img id="qq" th:src="@{/img/qq.png}" />
+				</button>
+			</div>
+		</div>
+
+		<div class="login_bottom">
+			<div class="row">
+				<div class="col-xs-12 login_bottom_register">
+					<button class="btn register" id="toRegister"
+						style="width: 80%; font-size: 15px;">手机快速注册</button>
+				</div>
+			</div>
+		</div>
+		<div id="dialog" style="type:hidden">
+			<span th:text="${message}"></span>
+		</div>
+	</div>
+
+</body>
+<script type="text/javascript">
+	var flag = 1;
+	function changeType() {
+		if (flag == 1) {
+			$("#login_password_value").attr('type', 'text');
+			$('#passwordeye').attr('src', '../../img/eye-on.png');
+			flag = 2
+		} else {
+			$("#login_password_value").attr('type', 'password');
+			$('#passwordeye').attr('src', '../../img/eye-off.png');
+			flag = 1;
+		}
+	}
+</script>
+</html>

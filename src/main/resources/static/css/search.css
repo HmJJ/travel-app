@@ -1,0 +1,38 @@
+.search_top{
+	text-align: center;
+	margin-top: 2%;
+}
+.search {
+	text-align: center;
+}
+#search_text {
+	width: 100%;
+	height: 40px;
+	border: hidden;
+	background-color: #F9F2F4;
+	font-size: 20px;
+	color: black;
+	font-family:"STKaiti",Georgia,Serif;
+}
+.cancle {
+	height: 40px;
+	border: hidden;
+	background-color: white;
+	font-size: 20px;
+	color: #777777;
+	font-family:"STKaiti",Georgia,Serif;
+}
+.search_middle,.search_bottom {
+	margin-top: 4%;
+	text-align: left;
+}
+#hot_title,#history_title {
+	font-size: 20px;
+	color: black;
+	font-family:"STKaiti",Georgia,Serif;
+}
+#clear {
+	font-size: 15px;
+	color: cornflowerblue;
+	font-family:"STKaiti",Georgia,Serif;
+}

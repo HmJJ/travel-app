@@ -1,0 +1,95 @@
+.main {
+	width: 100%
+}
+.mine_top {
+	text-align: center;
+	margin: auto;
+	margin-top: 2%;
+}
+
+.mine_setting {
+	font-size: 20px;
+}
+.setting_icon {
+	float: left;
+}
+.mine_message {
+	font-size: 20px;
+}
+.message_icon {
+	float: right;
+}
+.mine_welcome {
+	font-size: 25px;
+}
+#welcome_text {
+	float: left;
+	margin-top: 5%;
+}
+.mine_login {
+	margin-top: 5%;
+}
+.login_btn {
+	float: left;
+}
+.mine_img {
+	
+}
+#mine_img {
+	height: 100px;
+	padding-right: 25%;
+}
+
+
+.mine_middle {
+	text-align: center;
+	margin: auto;
+	margin-top: 4%;
+}
+.mine_per_menu1,.mine_per_menu2,.mine_per_menu3,.mine_per_menu4,.mine_per_menu5,.mine_per_menu6,.mine_per_menu7,.mine_per_menu8,.mine_per_menu9 {
+	height: 80px;
+}
+.mine_per_menu2,.mine_per_menu5,.mine_per_menu8 {
+	border-left: solid 1px #DDDDDD;
+	border-right: solid 1px #DDDDDD;
+}
+.mine_per_menu7,.mine_per_menu8,.mine_per_menu9 {
+	border-top: solid 1px #DDDDDD;
+}
+.per_menu {
+/* 	padding-top: 15%; */
+}
+#btn_img{
+	margin-top: 10%;
+}
+#btn_text{
+	margin-top: 2%;
+	font-size: 10px;
+	color: #999999;
+}
+
+.mine_mall {
+	margin-top: 5%;
+	text-align: center;
+}
+.mine_mall_text {
+	font-size: 20px;
+}
+#mall_text {
+	float: left;
+	font-size: 20px;
+	font-family:"STXingkai",Georgia,Serif;
+}
+.mine_right_icon {
+	font-size: 20px;
+}
+.right_icon {
+	float: right;
+	padding-top: 15%;
+}
+
+#mine_head_pic {
+	width:70px;
+	height:70px;
+	border-radius:50%;
+}

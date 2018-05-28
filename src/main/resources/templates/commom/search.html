@@ -1,0 +1,135 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+	<th:block layout:insert="~{html-head}">
+	<th:block layout:fragment="inculde-content">
+		<link rel="stylesheet" type="text/css" th:href="@{/css/search.css}" />
+	</th:block>
+	<th:block layout:fragment="script-content">
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$("#home_search_img").click(function() {
+					window.location.href = "/commom/search";
+				});
+				$("#search_result").hide();
+				$("#search_text").keyup(function(){
+					var search_text = $.trim($("#search_text").val());
+					if(search_text != null && $("#search_text").val().length != 0 && search_text != "" && search_text != undefined){
+						$.ajax({
+							type : "POST",
+							async : true,
+							url : '/search/place',
+							dataType : "json",
+							data : {
+								'searchtext' : search_text
+							},
+							success : function(data) {
+								console.log("sucess");
+								var retval = data;
+								var result_list = retval.data['result_list'];
+								console.log(result_list.length);
+								if(result_list.length > 0){									
+									$("#hot_history").hide();
+									$("#search_result").show();
+									$("#search_result").empty();
+									$.each(result_list, function(index, area){
+										$("#search_result").append(
+												"<br/><div class='col-xs-1'></div>"
+												+"<div class='col-xs-10' id='"+index+"'>"
+												+"<i class='glyphicon glyphicon-flag'></i><span>"+area['regionName']+"</span><br />"
+												+"<span>目的地</span>"
+												+"</div>"
+												+"<div class='col-xs-1'></div><br/>");
+										$("#"+index+"").click(function(){
+// 											console.log(area);
+											window.location.href="/destination/check?regionName="+area['regionName']+"&regionCode="+area['regionCode'];
+											show_loading();
+										})
+									});
+								}
+							},
+							error : function(){
+								console.log("faild");
+							}
+						});
+					}else{
+						$("#hot_history").show();
+						$("#search_result").hide();
+					}
+				});
+				$("#clear").click(function(){
+					$.ajax({
+						type : "POST",
+						async : true,
+						url : '/searchhistory/clear',
+						dataType : "json",
+						data : {},
+						success : function(data) {
+							$("#historys").empty();
+						},
+						error : function(){
+							console.log("faild");
+						}
+					});
+				});
+				
+			});
+		</script>
+		<style>
+			.loop {
+				width:100%;
+				height:100%;
+			}
+			body{
+				background-color:#ffffcc;
+			}
+		</style>
+		<title>Search</title>
+	</th:block>
+	</th:block>
+	<body>
+		
+		<div class="main" style="width:100%;">
+			<div class="row search_top">
+				<div class="col-xs-1"></div>
+				<div class="col-xs-8 search">
+					<input type="text" id="search_text" class="form-control" aria-describedby="basic-addon2" placeholder="我要去旅行" />
+				</div>
+				<div class="col-xs-3">
+					<button class="btn cancle" style="font-size: 20px;font-family: STXingkai;" onclick="javascript:history.back(-1);">取消</button>
+				</div>
+			</div>
+			<div class="row" id="search_result" style="text-align:left;">
+			</div>
+			<div id="hot_history">
+				<div class="row search_middle">
+					<div class="col-xs-4">
+						<span id="hot_title">热搜</span>
+					</div>
+					<div class="col-xs-8"></div>
+					<div th:if="${hots != null}" th:each="hot, start : ${hots}" style="text-align:center;">
+						<div class="col-xs-4">
+							<a th:text="hot.RegionName"></a>
+						</div>
+					</div>
+				</div>
+				<div class="row search_bottom">
+					<div class="col-xs-4">
+						<span id="history_title">历史记录</span>
+					</div>
+					<div class="col-xs-6"></div>
+					<div class="col-xs-2">
+						<span id="clear">清空</span>
+					</div>
+					<div id="historys" th:if="${historys != null}" th:each="history, start : ${historys}">
+						<div class="col-xs-4">
+							<a th:onclick="'javascript:check(\'' + ${history.RegionName} + '\',\'' + ${history.RegionCode} + '\');'" th:text="${history.RegionName}"></a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</body>
+</html>

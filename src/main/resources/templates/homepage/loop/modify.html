@@ -1,0 +1,150 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<th:block layout:insert="~{html-head}">
+	<th:block layout:fragment="inculde-content">
+		<script type="text/javascript" charset="utf-8"
+			th:src="@{/jqueryfileupload-9.19.1/js/vendor/jquery.ui.widget.js}"></script>
+		<script type="text/javascript" charset="utf-8"
+			th:src="@{/jqueryfileupload-9.19.1/js/jquery.iframe-transport.js}"></script>
+		<script type="text/javascript" charset="utf-8"
+			th:src="@{/jqueryfileupload-9.19.1/js/jquery.fileupload.js}"></script>
+		<script type="text/javascript" charset="utf-8" th:src="@{/My97DatePicker/WdatePicker.js}"></script>
+	</th:block>
+	<th:block layout:fragment="script-content">
+		<script type="text/javascript" th:inline="javascript">
+		var _fileupload_url = [[${_fileupload_url}]];
+		$(document).ready(function() {
+// 			$("#fileupload").attr("data-url", _fileupload_url);
+			$('#fileupload').fileupload({
+				type : 'post',
+				dataType:"json",
+				url:"/upload/images",
+				autoUpload : true,
+				done: function (e, data) {
+					console.log(data);
+					var retavl = data.result;
+					alert(retavl.data['remote_path']);
+					if (retavl) {
+						$("#img").val(retavl.data['remote_path']);
+						$("#imgurl").val(retavl.data['remote_path']);
+						$("#imgsrc").attr("src", "");
+						$("#imgsrc").attr("src", retavl.data['remote_path']);
+					}
+				},
+				fail : function(e, data) {
+					var retval = data;
+					console.log(retval.message);
+				}
+			});
+		});
+	</script>
+	</th:block>
+	<title>hello</title>
+</th:block>
+<body>
+	<div layout:insert="~{body-nav}" th:remove="tag"></div>
+	<div class="container content">
+		<div layout:insert="~{body-header}"
+			th:with="cn='\'轮播图配置\'新增/修改', en='Loop Configure Create/Modify'"
+			th:remove="tag">
+			<th:block layout:fragment="icon-btn-content">
+				<button class="icon-btn" id="historyback">
+					<i class="icon-undo"></i>
+					<div>
+						<span>Cancel</span>
+					</div>
+				</button>
+			</th:block>
+		</div>
+		<div layout:insert="~{body-alert}"
+			th:with="type='info', header='Info'" th:remove="tag">
+			<!--/* Implements alert content fragment with simple content */-->
+			<th:block layout:fragment="alert-content">
+				<p>
+					<em>This is a simple list of tasks!</em>
+				</p>
+			</th:block>
+		</div>
+		<th:block layout:insert="~{body-form}" th:with="form='modifyForm'"
+			th:remove="tag">
+			<th:block layout:fragment="body-form-query">
+				<th:block layout:fragment="body-form-query-content"></th:block>
+			</th:block>
+			<th:block layout:insert="body-form-modify">
+				<th:block layout:fragment="body-form-modify-content">
+					<input type="hidden" name="id" th:value="${entity.id}" />
+
+					<div class="form-group">
+						<label for="sort">排序<small>sort</small></label> <input type="text"
+							class="form-control" id="sort" name="sort"
+							th:value="${entity.sort }" />
+					</div>
+					<div class="panel panel-primary">
+						<div class="panel-body">
+							<div class="form-group">
+								<label for="imgUrl">轮播图<small>ImgSrc</small></label>
+								<div class="alert alert-info" role="alert"
+									style="margin-bottom: 0px;">图片大小 [ 360 x 200 ]</div>
+								<div class="row">
+									<div class="col-sm-4" style="margin-top: 10px;">
+										<div
+											style="height: 74px; padding-top: 4px; text-align: center;">
+											<img alt="logo" id="imgUrl" th:src="${entity.imgUrl }"
+												width="120px" height="66.6px;">
+										</div>
+									</div>
+									<div class="col-sm-8" style="margin-top: 10px;">
+										<div class="input-group">
+											<input type="hidden" id="imgurl" name="imgUrl"
+												th:value="${entity.imgUrl }" /> <input type="text"
+												class="form-control" id="img" value=""
+												style="margin-bottom: 6px;" readonly="readonly" /> <input
+												type='file' class="form-control" id="fileupload"
+												name="fileupload" value="" style="padding: 3px 12px;" />
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="title">图片标题<small>Title</small></label> <input
+							type="text" class="form-control" id="title" name="title"
+							th:value="${entity.title }" />
+					</div>
+					<div class="form-group">
+						<label for="linkUrl">点击图片链接地址<small>Click Url</small></label> <input
+							type="text" class="form-control" id="linkUrl" name="linkUrl"
+							th:value="${entity.linkUrl }" />
+					</div>
+					<div class="form-group">
+						<label for="startdate">轮播图片开始时间<small>Start Date</small></label>
+						<div class="input-group" id="selectstart">
+							<span class="input-group-addon">选择时间</span> <input type='text'
+								class="form-control" id="startdate" name="startdate"
+								th:value="${#dates.format(entity.startdate,'yyyy-MM-dd')}"
+								onclick="javascript:WdatePicker({onpicked:function(){enddate.value='';},doubleCalendar:true,isShowClear:false,readOnly:true});"
+								readonly='readonly' />
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="enddate">轮播图片结束时间<small>End Date</small></label>
+						<div class="input-group" id="selectend">
+							<span class="input-group-addon">选择时间</span> <input type='text'
+								class="form-control" id="enddate" name="enddate"
+								th:value="${#dates.format(entity.enddate,'yyyy-MM-dd')}"
+								onclick="javascript:WdatePicker({minDate:'#F{$dp.$D(\'startdate\')}',doubleCalendar:true,isShowClear:false,readOnly:true});"
+								readonly='readonly' />
+						</div>
+					</div>
+					<a href="javascript:void(0);"
+						th:onclick="'javascript:operate(\'commit\', \'' + @{/loop} + '\', \'' + @{/loop/commit} + '\');'"
+						class="btn btn-default"><span>Save</span></a>
+				</th:block>
+			</th:block>
+		</th:block>
+	</div>
+</body>
+</html>

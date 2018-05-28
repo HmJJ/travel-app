@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<th:block layout:insert="html-head">
+	<th:block layout:fragment="inculde-content">
+	</th:block>
+	<th:block layout:fragment="script-content">
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$("#btn_exit").click(function(){
+					$.ajax({
+						type : "POST",
+						async : true,
+						url : '/needLogin/exit',
+						dataType : "json",
+						data : {},
+						success : function(data) {
+//		 					alert(data.message);
+							window.location.href="/navigate?page=4";
+						}
+					});
+				});
+				$("#btn_myFoot").click(function(){
+					window.location.href="/needLogin/myFoot";
+					show_loading();
+				});
+				$("#btn_myNote").click(function(){
+					window.location.href="/needLogin/myNote";
+					show_loading();
+				});
+				$("#btn_myComment").click(function(){
+					window.location.href="/needLogin/myComment";
+					show_loading();
+				});
+			});
+		</script>
+		<style>
+		body{
+			background-color:#ffffcc;
+		}
+		</style>
+		<title>已登录</title>
+	</th:block>
+</th:block>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-4 mine_head_pic">
+				<img id="mine_head_pic" th:src="@{/img/head_pic.jpeg}" />
+			</div>
+			<div class="col-xs-4" style="height:70px;"></div>
+			<div class="col-xs-4 mine_head_exit" style="height:70px;">
+				<button id="btn_exit" class="btn btn-warning">退出登录</button>
+			</div>
+			<div class="col-xs-12" style="height:20px;"></div>
+			<div class="col-xs-4">
+				<button id="btn_myNote" class="btn btn-primary">我的游记</button>
+			</div>
+			<div class="col-xs-4">
+				<button id="btn_myComment" class="btn btn-primary">我的评论</button>
+			</div>
+			<div class="col-xs-4">
+				<button id="btn_myFoot" class="btn btn-primary">我的足迹</button>
+			</div>
+			<div class="col-xs-12" style="height:10px;"></div>
+		</div>
+	</div>
+</body>
+</html>

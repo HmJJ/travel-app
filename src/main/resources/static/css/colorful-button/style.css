@@ -1,0 +1,47 @@
+body {
+		margin: 0;
+  overflow: hidden;
+	}
+	#myCanvas {
+		display: block;
+	}
+
+	#tourists_enter,#manager_enter {
+		font-family: "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+		position: absolute;
+		font-size: 20px;
+		text-transform: uppercase;
+		padding: 7px 20px;
+		left: 50%;
+		width: 200px;
+		margin-left: -100px;
+		top: 50%;
+		border-radius: 10px;
+		color: white;
+		text-shadow: -1px -1px 1px rgba(0,0,0,0.8);
+		border: 5px solid transparent;
+		border-bottom-color: rgba(0,0,0,0.35);
+		background: hsla(360, 50%, 50%, 0.5);
+		cursor: pointer;
+
+		animation: pulse 1s infinite alternate;
+		transition: background 0.4s, border 0.2s, margin 0.2s;
+	}
+	#tourists_enter:hover,#manager_enter:hover {
+		background: hsla(360, 50%, 60%, 1);
+		margin-top: -1px;
+
+		animation: none;
+	}
+	#tourists_enter:active,#manager_enter:active {
+		border-bottom-width: 0;
+		margin-top: 5px;
+	}
+	@keyframes pulse {
+		0% {
+			margin-top: 0px;
+		}
+		100% {
+			margin-top: 6px; 
+		} 
+	}

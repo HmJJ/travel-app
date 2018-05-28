@@ -1,0 +1,265 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" th:remove="tag">
+<th:block layout:fragment="html-head">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+	
+	<link type="text/css" rel="stylesheet" th:href="@{/css/bootstrap/bootstrap.min.css}" />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap/bootstrap-theme.min.css}" />
+	<link type="text/css" rel="stylesheet" th:href="@{/font-awesome-3.2.1/css/font-awesome.min.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/common.css}" />
+	<link rel="stylesheet" type="text/css" th:href="@{/component.css}" />
+
+	<script th:src="@{/js/jquery/jquery-3.3.1.min.js}" type="text/javascript" charset="utf-8"></script>
+	<script th:src="@{/js/jquery/jquery.simpleWeather.min.js}" type="text/javascript" charset="utf-8"></script>
+	<script th:src="@{/js/jquery/jquery.form.min.js}" type="text/javascript" charset="utf-8"></script>
+	<script th:src="@{/js/jquery/jquery.highlight.js}" type="text/javascript" charset="utf-8"></script>
+	<script th:src="@{/js/bootstrap/bootstrap.min.js}" type="text/javascript" charset="utf-8"></script>
+	<script th:src="@{/js/bootstrap/collapse.js}" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" charset="utf-8" th:src="@{/bootbox-4.4.0/js/bootbox.min.js}"></script>
+	<script th:src="@{/component.js}" type="text/javascript" charset="utf-8"></script>
+	<script th:src="@{/validation.js}" type="text/javascript" charset="utf-8"></script>
+
+	<th:block layout:fragment="inculde-content"></th:block>
+
+	<style type="text/css">
+		@media (min-width: 1400px) { .container { width: 1370px; } }
+/* 		@media (min-width: 1560px) { .container { width: 1520px; } } */
+/* 		@media (min-width: 1640px) { .container { width: 1590px; } } */
+/* 		@media (min-width: 1880px) { .container { width: 1820px; } } */
+/* 		@media (min-width: 2000px) { .container { width: 1930px; } } */
+
+		.navbar { border-radius: 0px; }
+		.content { min-height: 800px; }
+
+		dd { margin: 20px 0; }
+		.dl-horizontal dt { width: initial; }
+		.dl-horizontal dd.context { white-space: normal; word-break: break-word; text-align: left; }
+		.context { white-space: normal; word-break: break-word; text-align: left; }
+
+		textarea, select, button, input[type="text"], input[type="password"], input[type="file"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input, .fileupload-new .input-append .btn-file {
+			border-radius: 0px; box-shadow: none; outline: none; font-variant: normal;
+		}
+		textarea:focus, select:focus, input[type="text"]:focus, input[type="password"]:focus, input[type="datetime"]:focus, input[type="datetime-local"]:focus, input[type="date"]:focus, input[type="month"]:focus, input[type="time"]:focus, input[type="week"]:focus, input[type="number"]:focus, input[type="email"]:focus, input[type="url"]:focus, input[type="search"]:focus, input[type="tel"]:focus, input[type="color"]:focus, .uneditable-input:focus {
+			border-radius: 0px; box-shadow: none; outline: none; background: #fff; 
+		}
+		button { box-shadow: none; outline: none; font-variant: normal; }
+		textarea { resize: none; }
+		textarea.form-control, select.form-control { border-radius: 0px; box-shadow: none; outline: none; }
+		textarea.form-control:focus, select.form-control:focus { border-radius: 0px; box-shadow: none; outline: none; }
+		select[disabled], html select[disabled] { background-color: #ebebe4; font-size: 80%; color: #555; }
+
+		td .btn { margin-left: 6px; }
+		small { margin-left: 10px; }
+
+		.input-group-addon { border-radius: 0px; }
+		.input-group .form-control { z-index: 0; }
+	</style>
+
+	<th:block layout:fragment="style-content"></th:block>
+
+	<script type="text/javascript" th:inline="javascript">
+		var _alert_title = "title";
+		var _alert_saving = "saving";
+		var _alert_confirm_delete = "delete";
+		var _alert_deleting = "deleting";
+		var _alert_success = "success";
+		var _alert_confirm_yes = "yes";
+		var _alert_confirm_no = "no";
+
+		$(document).ready(function() {
+			var searchKey = $("#searchKey").val();
+			$(".data tbody").highlight(searchKey != null ? searchKey : "");
+
+			$("#search").click(function() {
+				$('#query').modal({ keyboard: false }).modal('show');
+			});
+
+			$("#create").click(function() {
+				window.location.href = "create";
+				show_loading();
+			});
+
+			$("#searchForm #cancel").click(function() {
+				$("#searchForm input[type='text']").each(function() {
+					$(this).val("");
+				});
+				$("#searchForm input[type='tel']").each(function() {
+					$(this).val("");
+				});
+				$("#searchForm select").each(function() {
+					$(this).val("");
+				});
+			});
+
+			$("#searchForm #commit").click(function() {
+				$('#query').modal('hide');
+				$("#searchForm").attr("action", "search");
+				$("#searchForm").submit();
+				show_loading();
+			});
+
+			$("#historyback").click(function() {
+// 				show_loading();
+				history.back();
+			});
+			
+		});
+
+		function jump(url) {
+			window.location.href = url;
+			$("#loading").show();
+		}
+
+		function _opt_confirm(_message, _callback) {
+			bootbox.confirm({
+				title : '<i class="icon-exclamation-sign"></i><small>' + _alert_title + '</small>',
+				message : _message,
+				size : 'small',
+				buttons : {
+					confirm : {
+						label : _alert_confirm_yes,
+						className : 'btn-danger'
+					},
+					cancel : {
+						label : _alert_confirm_no,
+						className : 'btn-default'
+					}
+				},
+				callback : function(result) {
+					if (result) {
+						_callback();
+					}
+				}
+			});
+		}
+
+		function operate(opt, _context, _url) {
+			if (opt == 'delete' || opt == 'remove') {
+				_opt_confirm_delete(_context, _url);
+			} else if(opt == 'apply'){
+				_opt_submit(_context, _url, _opt_apply);
+			} else {
+// 				_opt_submit(_alert_saving, _context, _url, _opt_modify);
+				_opt_submit(_context, _url, _opt_modify);
+			}
+		}
+
+		function _opt_confirm_delete(_context, _url) {
+// 			bootbox.confirm({
+// 				title : '<i class="icon-exclamation-sign"></i><small>' + _alert_title + '</small>',
+// 				message : _alert_confirm_delete,
+// 				size : 'small',
+// 				buttons : {
+// 					confirm : {
+// 						label : _alert_confirm_yes,
+// 						className : 'btn-danger'
+// 					},
+// 					cancel : {
+// 						label : _alert_confirm_no,
+// 						className : 'btn-default'
+// 					}
+// 				},
+// 				callback : function(result) {
+// 					if (result) {
+// 						_opt_submit(_alert_deleting, _context, _url, _opt_commit);
+						_opt_submit( _context, _url, _opt_commit);
+// 					}
+// 				}
+// 			});
+		}
+
+// 		function _opt_submit(_alert, _context, _url, _callback) {
+		function _opt_submit( _context, _url, _callback) {
+// 			var dialog = bootbox.dialog({
+// 				title : '<i class="icon-exclamation-sign"></i><small>' + _alert_title + '</small>',
+// 				message: '<p><i class="fa fa-spin fa-spinner"></i> ' + _alert + '</p>',
+// 				size : 'small',
+// 				closeButton: false
+// 			});
+// 			dialog.init(function() {
+// 				$(":button,:submit").attr("disabled", "disabled");
+// 				_callback(dialog, _context, _url);
+				_callback( _context, _url);
+// 			});
+		}
+
+// 		function _opt_commit(dialog, _context, _url) {
+		function _opt_commit(_context, _url) {
+			$.ajax({
+				type : "POST",
+				async : true,
+				url : _url,
+				dataType : "json",
+				success : function(data) {
+// 					dialog.find('.bootbox-body').html(_alert_success);
+					setTimeout(function() {
+// 						dialog.modal('hide');
+						if ($("#searchForm").length > 0) { $("#searchForm").submit(); }
+						else { window.location.href = _context + '/search'; }
+						show_loading();
+					}, 1500);
+				},
+				error : function(data, status, e) {
+					$(":button,:submit").attr("disabled", null);
+				}
+			});
+		}
+
+// 		function _opt_modify(dialog, _context, _url) {
+		function _opt_modify( _context, _url) {
+			$(":button,:submit").attr("disabled", "disabled");
+			$("#modifyForm").ajaxSubmit({
+				type : "POST",
+				async : true,
+				url : _url,
+				dataType : "json",
+				success : function(data) {
+// 					dialog.find('.bootbox-body').html(_alert_success);
+					setTimeout(function() {
+// 						dialog.modal('hide');
+						if ($("#searchForm").length > 0) { $("#searchForm").submit(); }
+						else { window.location.href = _context + '/search'; }
+						show_loading();
+					}, 1500);
+				},
+				error : function(data, status, e) {
+					$(":button,:submit").attr("disabled", null);
+				}
+			});
+		}
+		
+		function _opt_apply( _context, _url) {
+			$.ajax({
+				type : "POST",
+				async : true,
+				url : _url,
+				dataType : "json",
+				data:{},
+				success : function(data) {
+					window.location.href = _context + '/search'; 
+					show_loading();
+				},
+				error : function(data, status, e) {
+					$(":button,:submit").attr("disabled", null);
+				}
+			});
+		}
+		
+		function check(_regionName, _regionCode){
+			window.location.href="/destination/check?regionName="+_regionName+"&regionCode="+_regionCode;
+			show_loading();
+		}
+		
+		function checknote(_noteId){
+			window.location.href="/travelnote/detail?id="+_noteId;
+			show_loading();
+		}
+
+	</script>
+	<th:block layout:fragment="script-content"></th:block>
+	<th:block layout:fragment="title-content"></th:block>
+</th:block>
+</html>

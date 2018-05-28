@@ -1,0 +1,104 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+	
+	<link type="text/css" rel="stylesheet" th:href="@{/css/bootstrap/bootstrap.min.css}" />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap/bootstrap-theme.min.css}" />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/common.css}" />
+
+	<script th:src="@{/js/jquery/jquery-3.3.1.min.js}" type="text/javascript" charset="utf-8"></script>
+	<script th:src="@{/js/bootstrap/bootstrap.min.js}" type="text/javascript" charset="utf-8"></script>
+	<title>导航</title>
+</head>
+<style>
+body{
+	background-color:#ffffcc;
+}
+.marin {
+	width: 100%;
+}
+._mainpage,._destination,._hotel,._mine {
+	width:100%;
+}
+.navigation {
+	width: 100%;
+	padding:0;
+	position: fixed;
+	bottom: 0;
+	text-align: center;
+}
+.navigate_bar {
+	border-top:solid 1px #777777;
+	padding-top:3px;
+	padding-bottom:3px;
+}
+</style>
+<script type="text/javascript">
+	$(document).ready(function() {
+		var page = [[${session.page}]];
+		
+		$("#view").load("/navigate/"+page);
+		
+		$("#_mainpage").click(function(){
+			changePage("1");
+		});
+		$("#_destination").click(function(){
+			var userflag = [[${session.userflag}]];
+			if(userflag == "0"){
+				changePage("4");
+			}else{
+				changePage("2");
+			}
+		});
+		$("#_hotel").click(function(){
+			changePage("3");
+		});
+		$("#_mine").click(function(){
+			changePage("4");
+		});
+
+		function changePage(_page){
+			window.location.href="navigate?page="+_page;
+			$("#loading").show();
+		}
+		
+		 
+	});
+</script>
+<body>
+
+	<div class="marin">
+		
+		<div id="view">
+			
+		</div>
+		
+		<div class="navigation">
+			<div class="row navigate_bar">
+<!-- 				<div class="col-xs-4" style="border-right:solid 1px #777777;"> -->
+				<div class="col-xs-4">
+					<button class="btn" style="border:hidden;background-color:#ccffcc;" id="_mainpage">首页</button>
+				</div>
+<!-- 				<div class="col-xs-4" style="border-right:solid 1px #777777;"> -->
+				<div class="col-xs-4">
+					<button th:if="${session.LocationCityName == null}" class="btn" style="border:hidden;background-color:#ccffcc;" id="_destination">目的地</button>
+					<button th:if="${session.LocationCityName != null}" class="btn" style="border:hidden;background-color:#ccffcc;" id="_destination" th:text="${session.LocationCityName}" >目的地</button>
+				</div>
+<!-- 				<div class="col-xs-3" style="border-right:solid 1px #777777;"> -->
+<!-- 					<button class="btn btn-default" style="border:hidden;" id="_hotel">酒店</button> -->
+<!-- 				</div> -->
+				<div class="col-xs-4">
+<!-- 					<button class="btn btn-info" style="border:hidden;padding-right:40px;" id="_mine">我的</button> -->
+					<button class="btn" style="border:hidden;background-color:#ccffcc;" id="_mine">我的</button>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" th:remove="tag">
+<th:block th:fragment="page-pagebar">
+	<div class="pagebar m-t-10">
+		<input type="hidden" id="index" th:value="${page.number }" />
+		<input type="hidden" id="size"  th:value="${page.size }" />
+		<span><a href="javascript:void(0);" class="pageinfo" th:classappend="${page.firstPage ? 'disabled' : ''}" th:onclick="${page.firstPage} ? 'javascript:void(0);' : 'javascript:redirect(\'first\');'">first</a></span>
+		<span><a href="javascript:void(0);" class="pageinfo" th:classappend="${page.firstPage ? 'disabled' : ''}" th:onclick="${page.firstPage} ? 'javascript:void(0);' : 'javascript:redirect(\'previous\');'">prev</a></span>
+		<span><a href="javascript:void(0);" class="pageinfo" th:classappend="${page.lastPage ? 'disabled' : ''}" th:onclick="${page.lastPage} ? 'javascript:void(0);' : 'javascript:redirect(\'next\');'">next</a></span>
+		<span><a href="javascript:void(0);" class="pageinfo" th:classappend="${page.lastPage ? 'disabled' : ''}" th:onclick="${page.lastPage} ? 'javascript:void(0);' : 'javascript:redirect(\'end\');'">end</a></span>
+	</div>
+	<div class="pagebar m-b-10">
+		<span>
+			<font style="padding-left: 10px">page</font> 
+			<input type="number" class="pageturn" id="pageturn" th:value="${page.number + 1 }" maxlength="4" />
+			<font>/</font>
+			<font style="padding: 0 10px;" th:text="${page.totalPages }"></font>
+			<a href="javascript:void(0);" title="Go" class="pageinfo" th:onclick="'javascript:turn(' + ${page.totalPages } + ');'" ><i class="icon-check"></i></a>
+		</span>
+		<span>
+			<font style="padding-left: 10px">rows</font>
+			<select class="pagesize" id="_pagesize">
+				<option value="20" th:selected="${page.size == 20}">20</option>
+				<option value="50" th:selected="${page.size == 50}">50</option>
+				<option value="100" th:selected="${page.size == 100}">100</option>
+			</select>
+			<font>/</font>
+			<font style="padding: 0 10px;" th:text="${page.totalElements }"></font>
+		</span>
+	</div>
+	<script type="text/javascript" th:inline="javascript">
+	$(document).ready(function() {
+		var _length = $(".data tbody").find("tr:first").find("td").length;
+		if (_length == 0) {
+			_length = $(".data thead").find("tr:first").find("th").length;
+		}
+		$("#pagebartd").attr("colspan", _length);
+		$("#_pagesize").change(function() {
+			var _size = $(this).children('option:selected').val();
+			$('#size').val(_size);
+			redirect('first');
+		});
+	});
+	function turn(total) {
+		if (total != null && total != '') {
+			if (parseInt($('#pageturn').val()) <= 0) { $('#pageturn').val('1'); }
+			if (parseInt($('#pageturn').val()) > total) { $('#pageturn').val(total); }
+		} else { $('#pageturn').val('1'); }
+		redirect('pageturn');
+	}
+	function redirect(type) {
+		var _html = "";
+		var pageindex;
+		var pagesize = parseInt($('#size').val());
+		if (type == 'first') { pageindex = 0; }
+		if (type == 'previous') { pageindex = parseInt($('#index').val()) - 1; }
+		if (type == 'next') { pageindex = parseInt($('#index').val()) + 1; }
+		if (type == 'end') { pageindex = [[${page.totalPages}]] - 1; }
+		if (type == 'pageturn') { pageindex = parseInt($('#pageturn').val()) - 1; }
+		$('#pageindex').val(pageindex < 0 ? 0 : pageindex);
+		$('#pagesize').val(pagesize);
+		var form = [[${form}]];
+		var action = [[${action}]];
+		$('#' + form).attr('action', action);
+		$('#' + form).submit();
+		show_loading();
+	}
+	</script>
+</th:block>
+</html>

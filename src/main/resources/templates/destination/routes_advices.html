@@ -1,0 +1,90 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+	<th:block layout:insert="html-head">
+		<th:block layout:fragment="inculde-content">
+			<link rel="stylesheet" type="text/css" th:href="@{/css/mine/login.css}" />
+		</th:block>
+		<th:block layout:fragment="script-content">
+			<script type="text/javascript">
+				$(document).ready(function() {
+				});
+			</script>
+			<style>
+				input:focus { outline: none; } 
+				body{
+					background-color:#ffffcc;
+				}
+				.title{
+					font-size: 20px;
+					font-family:"STSongti",Georgia,Serif;
+				}
+			</style>
+			<title>啾啾-路线推荐</title>
+		</th:block>
+	</th:block>
+<body>
+
+	<div class="main" style="width:100%;">
+
+		<div class="login_top">
+			<div class="row">
+				<div class="col-xs-2 login_top_back">
+					<i onclick="javascript:history.back(-1);"
+						class="glyphicon glyphicon-chevron-left"></i>
+				</div>
+				<div class="col-xs-8 login_top_word">
+					<span>路线推荐</span>
+				</div>
+				<div class="col-xs-2"></div>
+			</div>
+			<hr/>
+		</div>
+
+		<div class="row login_middle">
+			<!--按热度推荐-->
+			<div class="col-xs-12" style="text-align:left;">
+				<span class="title">按热度推荐:</span>
+			</div>
+			<div th:if="${hot_advice != null}" th:each="attr_hot, start : ${hot_advice}">
+				<div class="col-xs-4 per_attr" style="text-align:center;margin-top:10px;">
+					<a><span th:text="${start.count}+${attr_hot.name}"></span></a>
+				</div>
+			</div>
+			
+			<!--按人流量推荐-->
+			<div class="col-xs-12" style="text-align:left;margin-top:10px;">
+				<span class="title">按人流量推荐:</span>
+			</div>
+			<div th:if="${people_advice != null}" th:each="attr_people, start : ${people_advice}">
+				<div class="col-xs-4 per_attr" style="text-align:center;margin-top:10px;">
+					<a><span th:text="${start.count}+${attr_people.name}"></span></a>
+				</div>
+			</div>
+			
+			<!--按消费水平推荐-->
+			<div class="col-xs-12" style="text-align:left;margin-top:10px;">
+				<span class="title">按消费水平推荐:</span>
+			</div>
+			<div th:if="${expense_advice != null}" th:each="attr_expense, start : ${expense_advice}">
+				<div class="col-xs-4 per_attr" style="text-align:center;margin-top:10px;">
+					<a><span th:text="${start.count}+${attr_expense.name}"></span></a>
+				</div>
+			</div>
+			
+			<!--按交通便利程度推荐-->
+			<div class="col-xs-12" style="text-align:left;margin-top:10px;">
+				<span class="title">按交通便利程度推荐:</span>
+			</div>
+			<div th:if="${traffic_advice != null}" th:each="attr_traffic, start : ${traffic_advice}">
+				<div class="col-xs-4 per_attr" style="text-align:center;margin-top:10px;">
+					<a><span th:text="${start.count}+${attr_traffic.name}"></span></a>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+</body>
+</html>

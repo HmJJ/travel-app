@@ -1,0 +1,194 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<th:block layout:insert="html-head">
+	<th:block layout:fragment="inculde-content">
+<!-- 		<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSGo8PgQTJkQocZX59jSF6AZVCOr3PKkc&callback=initMap" type="text/javascript"></script> -->
+		<script type="text/javascript"
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSGo8PgQTJkQocZX59jSF6AZVCOr3PKkc&libraries=geometry">
+</script>
+<!-- 		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&libraries=geometry&v=3.7"></script> -->
+		<script type="text/javascript" th:src="@{/js/maplace.min.js}"></script>
+	</th:block>
+	<th:block layout:fragment="script-content">
+		<script type="text/javascript">
+			$(document).ready(function() {
+				
+				var Locs = [{
+						lat:31.23,
+						lon:121.48,
+						title:'黄浦区',
+						html:'黄浦区,上海，中国',
+						zoom:4,
+						icon:'https://maps.google.com/mapfiles/markerA.png',
+						animation:google.maps.Animation.DROP
+					},
+					{
+						lat:31.22,
+						lon:121.53,
+						title:'浦东新区',
+						html:'浦东新区,上海，中国',
+						zoom:4,
+						icon:'https://maps.google.com/mapfiles/markerB.png',
+						animation:google.maps.Animation.DROP
+					},{
+						lat:31.23,
+						lon:121.45,
+						title:'静安区',
+						html:'静安区,上海，中国',
+						zoom:4,
+						icon:'https://maps.google.com/mapfiles/markerC.png',
+						animation:google.maps.Animation.DROP
+					}];
+				
+				$.ajax({
+					type : "POST",
+					async : true,
+					url : '/needLogin/getfoots',
+					dataType : "json",
+					data:{},
+					success : function(data) {
+						foots = data.data;
+						var json = [];
+						for(var i = 0;i<foots.length;i++){
+							var j = {};
+							j.lat = foots[i]['latitude'];
+							j.lon = foots[i]['longitude'];
+							j.title = foots[i]['title'];
+							j.html = '';
+							j.zoom = foots[i]['zoom'];
+							j.icon = foots[i]['icon'];
+							j.animation = google.maps.Animation.DROP;
+							json.push(j);
+						}
+// 						Locs = JSON.stringify(json).replace(/\"/g,"'");
+						console.log(json);
+					}
+				});
+				
+				var LocsA = [{
+					lat: 12.58,
+					lon: 77.38,
+					title: 'Bangalore',
+					html: 'Bangalore, Karnataka, India',
+					zoom: 4,
+					icon: 'https://maps.google.com/mapfiles/markerA.png',
+					animation: google.maps.Animation.DROP
+				},
+				{
+					lat: 18.975,
+					lon: 72.8258,
+					title: 'Mumbai',
+					html: 'Mumbai, Maharashtra, India',
+					zoom: 4,
+					icon: 'https://maps.google.com/mapfiles/markerB.png',
+					animation: google.maps.Animation.DROP
+				},
+				{
+					lat: 25.6110,
+					lon: 85.1440,
+					title: 'Patna',
+					html: 'Patna, Bihar, India',
+					zoom: 4,
+					icon: 'https://maps.google.com/mapfiles/markerC.png',
+					animation: google.maps.Animation.DROP
+				},
+				{
+					lat: 28.6139,
+					lon: 77.2089,
+					title: 'New Delhi',
+					html: 'New Delhi, India',
+					zoom: 2,
+					icon: 'https://maps.google.com/mapfiles/markerD.png',
+					animation: google.maps.Animation.DROP
+				},
+				{
+					lat: 21.17,
+					lon: 72.83,
+					title: 'Surat',
+					html: 'Surat, Gujarat, India',
+					zoom: 4,
+					icon: 'https://maps.google.com/mapfiles/markerE.png',
+					animation: google.maps.Animation.DROP
+				}
+			];
+			
+			new Maplace({
+				locations: Locs,
+				map_div: '#gmap',
+				controls_type: 'list',
+				controls_title: 'Choose a place',
+
+				start: 4,
+				view_all_text: '[[${session.user.username}]]',
+				type: 'polyline' /*'circle'*/ ,
+				shared: {
+					zoom: 16,
+					html: '%index'
+				},
+				circleRadiusChanged: function(index, point, marker) {
+					$('#radiusInfo').text(
+						' - point #' + (index + 1) + ' size: ' + parseInt(marker.getRadius()) + 'mt.'
+					);
+				}
+			}).Load();
+			});
+		</script>
+		<style>
+			#gmap {
+				width: 100%;
+				height: 300px;
+				border: 1px solid #6699FF;
+				padding: 5px;
+				border-radius: 20px;
+				margin: 5px auto;
+			}
+			body{
+				background-color:#ffffcc;
+			}
+			#controls {
+				width: 150px;
+			}
+		
+			.ullist a span {
+				display: inline-block;
+				background: #FF5050;
+				width: 70%;
+				color: #fff;
+				padding: 10px;
+			}
+			.login_top{
+				text-align: center;
+				margin-top: 1%;
+			}
+			.login_top_back {
+				font-size: 25px;
+			}
+			.login_top_word {
+				text-align: center;
+				padding-top: 1%;
+				font-size: 20px;
+				color: #777777;
+				font-family:"STXingkai",Georgia,Serif;
+			}
+		</style>
+		<title>足迹</title>
+	</th:block>
+</th:block>
+<body>
+	<div class="row">
+		<div class="col-xs-2 login_top_back">
+			<i onclick="javascript:history.back(-1);"
+				class="glyphicon glyphicon-chevron-left"></i>
+		</div>
+		<div class="col-xs-8 login_top_word">
+			<span>我的足迹</span>
+		</div>
+		<div class="col-xs-2"></div>
+	</div>
+	<hr/>
+	<div id="controls"></div>
+	<div id="gmap"></div>
+</body>
+</html>

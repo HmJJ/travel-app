@@ -1,0 +1,117 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+	<th:block layout:insert="html-head">
+		<th:block layout:fragment="inculde-content">
+			<link rel="stylesheet" type="text/css" th:href="@{/css/mine/login.css}" />
+		</th:block>
+		<th:block layout:fragment="script-content">
+			<script type="text/javascript">
+				$(document).ready(function() {
+					$("#commit").click(function(){
+						var oldpasd = $("#oldpasd").val();
+						var newpasd = $("#newpasd").val();
+						var repeat = $("#repeat").val();
+						if(oldpasd == null || newpasd == null || repeat == null){
+							alert("数据未填完整");
+						}else if(newpasd != repeat){
+							alert("两次密码不一致");
+						}else{
+							$.ajax({
+								type : "POST",
+								async : true,
+								url : '/needLogin/changepassword',
+								dataType : "json",
+								data:{
+									'oldpasd':oldpasd,
+									'newpasd':newpasd
+								},
+								success : function(data) {
+									setTimeout(function() {
+										  alert(data.message);
+										}, 1500);
+									if(data.status == "y"){
+									    window.location.href="/needLogin";
+										$("#loading").show();
+									}else{
+										window.location.reload();
+										$("#loading").show();
+									}
+								},
+								error : function(data) {
+									console.log("failed");
+								}
+							});
+						}
+					});
+				});
+			</script>
+			<style>
+				input:focus { outline: none; } 
+				body{
+					background-color:#ffffcc;
+				}
+			</style>
+			<title>啾啾-修改个人信息</title>
+		</th:block>
+	</th:block>
+<body>
+
+	<div class="main" style="width:100%;">
+
+		<div class="login_top">
+			<div class="row">
+				<div class="col-xs-2 login_top_back">
+					<i onclick="javascript:history.back(-1);"
+						class="glyphicon glyphicon-chevron-left"></i>
+				</div>
+				<div class="col-xs-8 login_top_word">
+					<span>修改密码</span>
+				</div>
+				<div class="col-xs-2"></div>
+			</div>
+			<hr/>
+		</div>
+		
+		<div class="login_middle">
+			<div class="row">
+				<div class="col-xs-1"></div>
+				<div class="col-xs-4">
+					<label for="title">旧密码:</label>
+				</div>
+				<div class="col-xs-6">
+					<input type="password" id="oldpasd" name="oldpasd" style="border:hidden;" />
+				</div>
+				<div class="col-xs-1"></div>
+			</div>
+			<div class="row" style="margin-top:15px;">
+				<div class="col-xs-1"></div>
+				<div class="col-xs-4">
+					<label for="title">新密码：</label>
+				</div>
+				<div class="col-xs-6">
+					<input type="password" id="newpasd" name="newpasd" style="border:hidden;"/>
+				</div>
+				<div class="col-xs-1"></div>
+			</div>
+			<div class="row" style="margin-top:15px;">
+				<div class="col-xs-1"></div>
+				<div class="col-xs-4">
+					<label for="content">再次输入：</label>
+				</div>
+				<div class="col-xs-6">
+					<input type="password" id="repeat" name="repeat" style="border:hidden;"></input>
+				</div>
+				<div class="col-xs-1"></div>
+			</div>
+			<div class="row" style="margin-top:15px;">
+				<div class="col-xs-12">
+					<a id="commit"><button class="btn btn-primary">确认修改</button></a>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</body>
+</html>

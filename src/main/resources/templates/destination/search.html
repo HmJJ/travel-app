@@ -1,0 +1,128 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head>
+	<title>目的地</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+	
+	<link rel="stylesheet" type="text/css" th:href="@{/css/destination/destination.css}" />
+	<link type="text/css" rel="stylesheet" th:href="@{/css/bootstrap/bootstrap.min.css}" />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap/bootstrap-theme.min.css}" />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/common.css}" />	
+	
+	<script th:src="@{/js/jquery/jquery-3.3.1.min.js}" type="text/javascript" charset="utf-8"></script>
+	<script th:src="@{/js/jquery/jquery.simpleWeather.min.js}" type="text/javascript" charset="utf-8"></script>
+	<script th:src="@{/js/bootstrap/bootstrap.min.js}" type="text/javascript" charset="utf-8"></script>	
+		
+</head>
+<script type="text/javascript">
+			$(document).ready(function() {
+				$("#to_search_text").click(function() {
+					window.location.href = "/commom/search";
+					show_loading();
+				});
+				var pre = '[[${session.destinationRegionName}]]';
+				var city = '[[${session.LocationCityName}]]';
+				if(pre != 'none'){
+					city = pre;
+				}
+				$.simpleWeather({
+					location : city,
+					//				woeid:'2151849',
+					woeid : '',
+					unit : 'C',
+					success : function(weather) {
+						html = '<h2><i class="icon-'+weather.code+'"></i>'
+								+ weather.temp
+								+ '&deg;'
+								+ weather.units.temp
+								+ '</h2>';
+						// 					html += '<ul><li>'+weather.city+','+weather.region+'</li>';
+						// 					html += '<li class="currently">'+weather.currently+'</li></ul>';
+						$("#weather").html(html);
+					},
+					error : function(error) {
+						$("#weather").html('<p>' + error + '</p>')
+					}
+				});
+			})
+</script>
+<style>
+body{
+	background-color:#ffffcc;
+}
+</style>
+
+<body>
+
+<div class="container">
+
+	<div class="main">
+		<div class="row top" style="background:url(img/fengjing1.jpg);">
+			<div class="col-xs-2">
+				<img th:src="@{/img/search_history.png}" />
+			</div>
+			<div class="col-xs-8" id="to_search">
+				<input type="text" readonly id="to_search_text" class="form-control"
+					aria-describedby="basic-addon2" placeholder="我要去旅游" />
+			</div>
+			<div class="col-xs-2" style="text-align: center;">
+				<img th:src="@{/img/discovery.png}" />
+			</div>
+			<div class="col-xs-7 place_info">
+				<span th:if="${session.parent != null}" id="province" th:text="${session.parent.regionName}">上海</span><br />
+				<span th:if="${session.destination != null}" id="country" th:text="${session.destination.regionName}">浦东新区</span>
+				<span th:if="${session.destination == null && session.parent == null}" id="province" th:text="${session.LocationProvinceName}">上海</span><br />
+				<span th:if="${session.destination == null && session.parent == null}" id="country" th:text="${session.LocationCityName}">浦东新区</span>
+				<i class="glyphicon glyphicon-chevron-down" id="more_icon"></i><br />
+<!-- 				<span id="pic_num">51万张照片&gt;</span> -->
+			</div>
+			<div class="col-xs-5" style="text-align: center;">
+				<div id="weather"></div>
+			</div>
+		</div>
+		<div class="divide_block"></div>
+		<div class="row middle">
+			<!--菜单-->
+			<div th:if="${btns != null and btns.content != null}" class="row home_menu">
+				<div th:each="btn,btn_start : ${btns.content }">
+					<div class="col-xs-3 per_menu" style="margin-bottom:16px;">
+						<a th:href="@{${btn.linkUrl}}"><img id="btn_img" class="img-rounded" th:src="${btn.imgSrc}" style="width: 50px; height: 50px;" /></a><br />
+						<a th:href="@{${btn.linkUrl}}"><span id="btn_text" th:text="${btn.name}"></span></a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="divide_block"></div>
+		<div class="row bottom" style="overflow-y:auto; overflow-x:auto; height:360px;">
+			<!--推荐目的地-->
+			<div th:if="${travelnotes != null}" th:each="travelnote, start : ${travelnotes}">
+				<div class="col-xs-12 per_note" style="margin-top:15px;border-bottom:1px solid;">
+					<div class="row">
+						<div class="col-xs-2">
+							<span th:text="${travelnote.user.username}"></span>
+						</div>
+						<div class="col-xs-8">
+							<span th:text="${travelnote.title}"></span>
+						</div>
+						<div class="col-xs-2">
+							<span th:text="${travelnote.attractionname}"></span>
+						</div>
+						<div class="col-xs-12">
+							<a th:onclick="'javascript:checknote(\'' + ${travelnote.id} + '\');'"><span th:text="${travelnote.content}"></span></a>
+						</div>
+						<div class="col-xs-12" style="text-align:right;">
+							<span th:text="${'浏览量：'+travelnote.watchs}"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+</div>
+
+</body>
+</html>

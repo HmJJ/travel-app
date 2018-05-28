@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<th:block layout:insert="html-head">
+	<th:block layout:fragment="inculde-content">
+		<link rel="stylesheet" type="text/css" th:href="@{/css/mine/login.css}" />
+	</th:block>
+	<th:block layout:fragment="script-content">
+		<script type="text/javascript">
+			$(document).ready(function() {
+				
+			});
+		</script>
+		<style>
+		body{
+			background-color:#ffffcc;
+		}
+		</style>
+		<title>查看游记</title>
+	</th:block>
+</th:block>
+<body>
+	<div class="container">
+	
+		<div class="login_top">
+			<div class="row">
+				<div class="col-xs-2 login_top_back">
+					<i onclick="javascript:history.back(-1);"
+						class="glyphicon glyphicon-chevron-left"></i>
+				</div>
+				<div class="col-xs-8 login_top_word">
+					<span>游记详情</span>
+				</div>
+				<div class="col-xs-2"></div>
+			</div>
+			<hr/>
+		</div>
+		
+		<div class="row note">
+			<div class="col-xs-4 author" style="text-align:center;">
+				<span th:text="${entity.user.username}"></span>
+			</div>
+			<div class="col-xs-4 attraction" style="text-align:center;">
+				<span th:text="${entity.attractionname}"></span>
+			</div>
+			<div class="col-xs-4 time">
+				<span th:text="${#dates.format(entity.createdate,'yyyy-MM-dd HH-mm-ss')}"></span>
+			</div>
+			<div class="col-xs-12 title" style="text-align:center;">
+				<span th:text="${entity.title}"></span>
+			</div>
+			<div class="col-xs-12 content">
+				<span th:text="${entity.content}"></span>
+			</div>
+<!-- 			<div class="col-xs-12"> -->
+<!-- 				<div class="row"> -->
+<!-- 					<div th:if="${entity != null && entity.images != null}" th:each="image,start : ${entity.images}"> -->
+<!-- 						<div class="col-xs-4 image"> -->
+<!-- 							<img th:src="${image.imgUrl}" style="width:50px;height:40px;" /> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
+			<div class="col-xs-6"></div>
+			<div class="col-xs-3 upvote">
+				<i class="glyphicon glyphicon-thumbs-up upvote_icon"><span th:text="${#sets.size(entity.upvotes)}">0</span></i>
+			</div>
+			<div class="col-xs-3 comment">
+				<i class="glyphicon glyphicon-comment comment_icon"><span th:text="${#sets.size(entity.comments)}"></span></i>
+			</div>
+			<hr />
+			<span>评论：</span>
+			<hr />
+			<div th:if="${entity != null && entity.comments != null}" th:each="comment,start : ${entity.comments}">
+				<div class="col-xs-12 content">
+					<span th:text="${comment.user.username} + ': ' + ${comment.content}"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
